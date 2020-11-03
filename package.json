@@ -1,0 +1,13 @@
+{
+  "name": "aa-1.5",
+  "version": "1.0.0",
+  "description": "aa 1.5",
+  "main": "aa.js",
+  "repository": "git@github.com:jasmyn/aa-1.5.git",
+  "author": "Jaz <jaz@weatherheadco.de>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "readdirp": "^3.5.0"
+  }
+}
