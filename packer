@@ -4,7 +4,7 @@ const { Transform } = require('stream')
 const readdirp = require('readdirp')
 
 //#region get files, dirs
-let files, dirs, fileNames, dirNames
+let files, dirs, fileNames, filePaths, dirNames
 
 const getDirs = async () => {
 	try {
@@ -29,8 +29,8 @@ const getFiles = async () => {
 			directoryFilter: [ '!.git', '!*modules' ],
 			alwaysStat: true
 		})
-		// fileNames = files.map(file => file.path)
-		fileNames = files.map(file => file.fullPath)
+		fileNames = files.map(file => [file.path, file.fullPath])
+		// fileNames = files.map(file => file.fullPath)
 	} catch (err) {
 		throw err
 	}
@@ -61,9 +61,9 @@ const TransformStream = new Transform({
 const processFiles = async () => {
 	await getFiles()
 	for (const file of fileNames) {
-		await fs.createReadStream(file)
+		await fs.createReadStream(file[1])
 		.on('data', (chunk) => {
-				writeMe.write(`{ file: '${file}',\n`)
+				writeMe.write(`{ file: '${file[0]}',\n`)
 			})
 		.pipe(TransformStream)
 	}
