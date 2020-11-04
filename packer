@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+const fs = require('fs-extra')
+const { Transform } = require('stream')
+const readdirp = require('readdirp')
+
+//#region get files, dirs
+let files, dirs, fileNames, dirNames
+
+const getDirs = async () => {
+	try {
+		dirs = await readdirp.promise('./test', {
+			root: './',
+			type: 'directories',
+			directoryFilter: [ '!.git', '!*modules' ],
+			alwaysStat: true
+		})
+		// dirNames = dirs.map(dir => dir.path)
+		dirNames = dirs.map(dir => dir.fullPath)
+	} catch (err) {
+		throw err
+	}
+}
+
+const getFiles = async () => {
+	try {
+		files = await readdirp.promise('./test', {
+			root: './',
+			type: 'files',
+			directoryFilter: [ '!.git', '!*modules' ],
+			alwaysStat: true
+		})
+		// fileNames = files.map(file => file.path)
+		fileNames = files.map(file => file.fullPath)
+	} catch (err) {
+		throw err
+	}
+}
+
+// #endregion
+
+//#region process files
+const writeMe = fs.createWriteStream('output', {flags: 'a'})
+
+const TransformStream = new Transform({
+	transform(chunk, encoding, callback) {
+		console.log('before: ', chunk.toString())
+	
+		const reNewLine = /\n/g
+		const newChunk = chunk.toString().replace(reNewLine, '\\n')
+		
+		writeMe.write(`content: ${newChunk}\n\n`)
+		
+		console.log('after: ', newChunk)
+		this.push(newChunk)
+		callback()
+	}
+})
+
+const processFiles = async () => {
+	await getFiles()
+	for (const file of fileNames) {
+		fs.createReadStream(file)
+	.on('data', (chunk) => {
+			let content = chunk
+			writeMe.write(`file: ${file}\n`)
+		})
+			.pipe(TransformStream)
+	}
+}
+processFiles()
+// console.log(processFiles())
+
+//#endregion
