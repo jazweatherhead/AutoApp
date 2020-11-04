@@ -50,7 +50,7 @@ const TransformStream = new Transform({
 		const reTab = /\t/g
 		const newestChunk = newChunk.replace(reTab, '\\t')
 		
-		writeMe.write(`content: ${newestChunk}\n\n`)
+		writeMe.write(`  content: '${newestChunk}'},\n`)
 		
 		console.log('after: ', newestChunk)
 		this.push(newChunk) // TODO necessary?
@@ -61,10 +61,10 @@ const TransformStream = new Transform({
 const processFiles = async () => {
 	await getFiles()
 	for (const file of fileNames) {
-		fs.createReadStream(file)
+		await fs.createReadStream(file)
 		.on('data', (chunk) => {
 				let content = chunk
-				writeMe.write(`file: ${file}\n`)
+				writeMe.write(`{ file: '${file}',\n`)
 			})
 		.pipe(TransformStream)
 	}
