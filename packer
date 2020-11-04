@@ -4,7 +4,7 @@ const { Transform } = require('stream')
 const readdirp = require('readdirp')
 
 //#region get files, dirs
-let files, dirs, fileNames, filePaths, dirNames
+let files, dirs, fileNames, dirNames
 
 const getDirs = async () => {
 	try {
@@ -27,6 +27,7 @@ const getFiles = async () => {
 			root: './',
 			type: 'files',
 			directoryFilter: [ '!.git', '!*modules' ],
+			fileFilter: ['!*.png', '!*.ico', '!.DS_Store'],
 			alwaysStat: true
 		})
 		fileNames = files.map(file => [file.path, file.fullPath])
@@ -46,13 +47,14 @@ const TransformStream = new Transform({
 		// console.log('before: ', chunk.toString())
 	
 		const reNewLine = /\n/g
-		const newChunk = chunk.toString().replace(reNewLine, '\\n')
 		const reTab = /\t/g
-		const newestChunk = newChunk.replace(reTab, '\\t')
+		const reQuote = /'/g
+		const reDQuote = /"/g
+		const newChunk = chunk.toString().replace(reNewLine, '\\n').replace(reTab, '\\t').replace(reQuote, "\\'").replace(reDQuote, '\\"')
 		
-		writeMe.write(`  content: '${newestChunk}'},\n`)
+		writeMe.write(`  content: "${newChunk}"},\n`)
 		
-		// console.log('after: ', newestChunk)
+		// console.log('after: ', newChunk)
 		this.push(newChunk) // TODO necessary?
 		callback()
 	}
@@ -66,6 +68,7 @@ const processFiles = async () => {
 				writeMe.write(`{ file: '${file[0]}',\n`)
 			})
 		.pipe(TransformStream)
+		TransformStream.resume() // TODO still leaking...
 	}
 }
 processFiles()
