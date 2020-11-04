@@ -8,9 +8,6 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "cli-spinner": "^0.2.10",
-    "destroy": "^1.0.4",
-    "fs-extra": "^9.0.1",
     "readdirp": "^3.5.0"
   }
 }
