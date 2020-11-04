@@ -27,7 +27,7 @@ const getFiles = async () => {
 			root: './',
 			type: 'files',
 			directoryFilter: [ '!.git', '!*modules' ],
-			fileFilter: ['!*.png', '!*.ico', '!.DS_Store'],
+			fileFilter: ['!*.png', '!*.ico', '!.DS_Store', '*.lock'],
 			alwaysStat: true
 		})
 		fileNames = files.map(file => [file.path, file.fullPath])
