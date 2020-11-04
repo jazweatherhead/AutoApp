@@ -1,7 +1,0 @@
-extends layout
-
-block content
-	h1= title
-	each val in movies
-		p
-			a(href=`/${val._id}`) #{val.title}
