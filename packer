@@ -14,8 +14,8 @@ const getDirs = async () => {
 			directoryFilter: [ '!.git', '!*modules' ],
 			alwaysStat: true
 		})
-		// dirNames = dirs.map(dir => dir.path)
-		dirNames = dirs.map(dir => dir.fullPath)
+		dirNames = dirs.map(dir => dir.path)
+		// dirNames = dirs.map(dir => dir.fullPath)
 	} catch (err) {
 		throw err
 	}
@@ -43,7 +43,7 @@ const writeMe = fs.createWriteStream('output', {flags: 'a'})
 
 const TransformStream = new Transform({
 	transform(chunk, encoding, callback) {
-		console.log('before: ', chunk.toString())
+		// console.log('before: ', chunk.toString())
 	
 		const reNewLine = /\n/g
 		const newChunk = chunk.toString().replace(reNewLine, '\\n')
@@ -52,7 +52,7 @@ const TransformStream = new Transform({
 		
 		writeMe.write(`  content: '${newestChunk}'},\n`)
 		
-		console.log('after: ', newestChunk)
+		// console.log('after: ', newestChunk)
 		this.push(newChunk) // TODO necessary?
 		callback()
 	}
@@ -63,13 +63,22 @@ const processFiles = async () => {
 	for (const file of fileNames) {
 		await fs.createReadStream(file)
 		.on('data', (chunk) => {
-				let content = chunk
 				writeMe.write(`{ file: '${file}',\n`)
 			})
 		.pipe(TransformStream)
 	}
 }
 processFiles()
-// console.log(processFiles())
+
+const processDirs = async () => {
+	await getDirs()
+	writeMe.write(`let dirs = [\n`)
+	for (const dir of dirNames) {
+		console.log(dir)
+			writeMe.write(`\t'${dir}',\n`)
+	}
+	writeMe.write(`]\n\n`)
+}
+processDirs()
 
 //#endregion
