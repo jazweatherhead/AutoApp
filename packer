@@ -47,11 +47,13 @@ const TransformStream = new Transform({
 	
 		const reNewLine = /\n/g
 		const newChunk = chunk.toString().replace(reNewLine, '\\n')
+		const reTab = /\t/g
+		const newestChunk = newChunk.replace(reTab, '\\t')
 		
-		writeMe.write(`content: ${newChunk}\n\n`)
+		writeMe.write(`content: ${newestChunk}\n\n`)
 		
-		console.log('after: ', newChunk)
-		this.push(newChunk)
+		console.log('after: ', newestChunk)
+		this.push(newChunk) // TODO necessary?
 		callback()
 	}
 })
@@ -60,11 +62,11 @@ const processFiles = async () => {
 	await getFiles()
 	for (const file of fileNames) {
 		fs.createReadStream(file)
-	.on('data', (chunk) => {
-			let content = chunk
-			writeMe.write(`file: ${file}\n`)
-		})
-			.pipe(TransformStream)
+		.on('data', (chunk) => {
+				let content = chunk
+				writeMe.write(`file: ${file}\n`)
+			})
+		.pipe(TransformStream)
 	}
 }
 processFiles()
