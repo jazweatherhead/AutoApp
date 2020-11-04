@@ -187,17 +187,17 @@ files = [
 })(files)
 
 /* Copies the banner and favicon from assets/ to their final destination */
-;(function copyAssets() {
-  /* favicon.ico */
-  var source_favicon = fs.createReadStream(config.asset_dir + 'favicon.ico')
-  var favicon = fs.createWriteStream('./public/favicon.ico')
-  source_favicon.pipe(favicon)
+// ;(function copyAssets() {
+//   /* favicon.ico */
+//   var source_favicon = fs.createReadStream(config.asset_dir + 'favicon.ico')
+//   var favicon = fs.createWriteStream('./public/favicon.ico')
+//   source_favicon.pipe(favicon)
 
-  /* banner.png (any size) */
-  var source_banner = fs.createReadStream(config.asset_dir + 'banner.png')
-  var banner = fs.createWriteStream('./public/img/banner.png')
-  source_banner.pipe(banner)
-})()
+//   /* banner.png (any size) */
+//   var source_banner = fs.createReadStream(config.asset_dir + 'banner.png')
+//   var banner = fs.createWriteStream('./public/img/banner.png')
+//   source_banner.pipe(banner)
+// })()
 
 /* Installs the project dependencies */
 ;(function installDeps (spinner) {
