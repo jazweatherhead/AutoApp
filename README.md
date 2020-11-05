@@ -12,8 +12,8 @@ Right? Just feed it some assets and watch it go...
 
 - Complete MERN setup
 - Demo CRUD app
-	- Server on [:9000](localhost:9000)
-	- Client on [:3000](localhost:3000)
+	- Server on [:9000](http://localhost:9000)
+	- Client on [:3000](http://localhost:3000)
 - [Mongoose](http://mongoosejs.com/)
 - [React Router](http://https://reactrouter.com/)
 
