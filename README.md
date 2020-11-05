@@ -15,7 +15,7 @@ Right? Just feed it some assets and watch it go...
 	- Server on [:9000](http://localhost:9000)
 	- Client on [:3000](http://localhost:3000)
 - [Mongoose](http://mongoosejs.com/)
-- [React Router](http://https://reactrouter.com/)
+- [React Router](https://reactrouter.com/)
 
 ## Make it so!
 
