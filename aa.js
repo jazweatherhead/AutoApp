@@ -21,6 +21,17 @@ const config = { // TODO db stuff
 	}
 }
 
+;(function makeNouns() {
+	const lowerCase = config.dbNoun.toLowerCase()
+	console.log(lowerCase)
+	
+	const upperCase = config.dbNoun.toUpperCase()
+	console.log(upperCase)
+	
+	const titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
+	console.log(titleCase)
+})()
+
 /* Setup spinner */
 const Spinner = require('cli-spinner').Spinner
 const spinner = new Spinner('processing.. %s')
