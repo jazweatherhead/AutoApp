@@ -1,2 +1,2 @@
-{ file: 'app.js',
+{ file: 'api/models/films.js',
   content: "const mongoose = require(\'mongoose\')\n\nconst filmSchema = new mongoose.Schema({\n\ttitle: { type: String, required: true},\n\tdirector: { type: String, required: true},\n\tyear: { type: Number, required: true},\n\n})\nmongoose.model(\'Film\', filmSchema) // the first param determines the collection name\n"},

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const fs = require('fs-extra')
-const { Transform } = require('stream')
 
 const config = {
 	dbNounSingular: 'film',
@@ -48,8 +47,8 @@ mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first 
 
 packModel = async () => {
 	try {
-		const writeModel = await fs.createWriteStream(`model/${lowerCasePlural}.packed.js`, {flags: 'a'})
-		await writeModel.write("{ file: 'app.js',\n  content: ")
+		const writeModel = await fs.createWriteStream(`model/${lowerCasePlural}.js`, {flags: 'a'})
+		await writeModel.write(`{ file: 'api/models/${lowerCasePlural}.js',\n  content: `)
 		
 		const model = makeModel()
 		
@@ -72,36 +71,3 @@ packModel = async () => {
 	}
 }
 packModel()
-
-//#region process files
-
-const TransformStream = new Transform({
-	transform(chunk, encoding, callback) {
-		// console.log('before: ', chunk.toString())
-	
-		const reNewLine = /\n/g
-		const reTab = /\t/g
-		const reQuote = /'/g
-		const reDQuote = /"/g
-		const newChunk = chunk.toString()
-			.replace(reNewLine, '\\n')
-			.replace(reTab, '\\t')
-			.replace(reQuote, "\\'")
-			.replace(reDQuote, '\\"')
-		
-		writeModel.write(`${newChunk}`)
-		
-		// console.log('after: ', newChunk)
-		callback()
-	}
-})
-
-// const makeModel = async () => {
-// 	await makeBaseModel()
-// 	await fs.createReadStream(`/Users/jaz/CODE/React/aa-1.5/model/movies.js`)
-// 		.pipe(TransformStream)
-// 	TransformStream.resume() // TODO still leaking...
-// }
-// makeModel()
-
-//#endregion
