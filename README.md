@@ -19,12 +19,14 @@ Right? Just feed it some assets and watch it go...
 
 ## Make it so!
 
-1. **Clone** the repo into your empty project directory. Don't forget the trailing dot!
-```
-$ git clone http://github.com/jasmyn/AutoAppJS.git .
-```
+### Clone
+Clone the repo into your empty project directory. Don't forget the trailing dot!
 
-2. **Configure** the config object at the top of aa.js.
+`$ git clone http://github.com/jasmyn/AutoAppJS.git .`
+
+
+### Configure
+Edit the config object at the top of aa.js.
 
 | config key | description                                           |
 |------------|-------------------------------------------------------|
@@ -38,8 +40,7 @@ $ git clone http://github.com/jasmyn/AutoAppJS.git .
 	`logo192.png`
 	`logo512.png`
 	
-
-3. **Create** your app. This can take several minutes while it installs the dependencies. 
+### Create
 
 `$ npm install` or `$ yarn install`
 
