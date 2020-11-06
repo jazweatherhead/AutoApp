@@ -10,8 +10,8 @@ Right? Just feed it some assets and watch it go...
 
 ## Features
 
-- Complete MERN setup
-- Demo CRUD app
+- Complete [MERN](https://www.mongodb.com/mern-stack) setup
+- [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) back-end
 	- Server on [:9000](http://localhost:9000)
 	- Client on [:3000](http://localhost:3000)
 - [Mongoose](http://mongoosejs.com/)
@@ -24,17 +24,29 @@ Right? Just feed it some assets and watch it go...
 $ git clone http://github.com/jasmyn/AutoAppJS.git .
 ```
 
-2. **Configure** the config object at the top of aa.js with the app name and the asset directory and replace the contents of assets/ with your 
-	- favicon.ico
-	- logo192.png
-	- logo512.png
+2. **Configure** the config object at the top of aa.js.
+
+| config key | description                                           |
+|------------|-------------------------------------------------------|
+| name       | The site/app name.                                    |
+| dbNoun     | The thing you're using the db to store.               |
+| dbDef      | The db field names, types and if they're required.    |
+| yarn       | True installs dependencies with yarn. False uses npm. |
+
+ Then replace the contents of `assets/` with your 
+	`favicon.ico`
+	`logo192.png`
+	`logo512.png`
 	
 
 3. **Create** your app. This can take several minutes while it installs the dependencies. 
 
-```
-$ node aa
-```
+`$ npm install` or `$ yarn install`
+
+*The next step can take several minutes as AutoApp installs both client and server dependencies. It's noticably faster with yarn. If using yarn,  set config.yarn to true to prevent lock file conflicts.*
+
+`$ node aa`
+
 ## Usage
 
 Make sure Mongo is running locally, then...
