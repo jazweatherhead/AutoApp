@@ -4,7 +4,7 @@ const fs = require('fs')
 const config = { // TODO db stuff
   name: 'BlackCat', /* (no spaces) */
 	dbNounSingular: 'movie', // thing you're storing in db
-	dbNounPlural: '" + lowerCasePlural + "',
+	dbNounPlural: 'movies',
 	dbDef: { // db fields, field types and if they're required
 		title: {
 			type: 'string',
