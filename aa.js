@@ -21,16 +21,16 @@ const config = { // TODO db stuff
 	}
 }
 
-;(function makeNouns() {
-	const lowerCase = config.dbNoun.toLowerCase()
-	console.log(lowerCase)
+// ;(function makeNouns() {
+// 	const lowerCase = config.dbNoun.toLowerCase()
+// 	console.log(lowerCase)
 	
-	const upperCase = config.dbNoun.toUpperCase()
-	console.log(upperCase)
+// 	const upperCase = config.dbNoun.toUpperCase()
+// 	console.log(upperCase)
 	
-	const titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
-	console.log(titleCase)
-})()
+// 	const titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
+// 	console.log(titleCase)
+// })()
 
 /* Setup spinner */
 const Spinner = require('cli-spinner').Spinner
@@ -215,6 +215,8 @@ function promiseFromChildProcess(child) {
 			child.addListener("exit", resolve);
 	});
 }
+
+const exec = require('child_process').exec
 
 ;(async (spinner) => {
 	// const serverDeps = exec('npm i',
