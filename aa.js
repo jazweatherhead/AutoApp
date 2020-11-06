@@ -209,16 +209,56 @@ files = [
 })()
 
 /* Installs the project dependencies */
-;(function installDeps (spinner) {
-  var exec = require('child_process').exec, child
-  child = exec('npm i',
-    function (err, stdout, stderr) { // the callback
-      console.log(`AA: built dependencies... ${stdout}`)
-      console.log(`AA: dependencies... ${stderr}`)
-      spinner.stop()
-      if (err !== null) {
-        console.log('exec error: ${err}')
-      }
-    }
-  )
-})(spinner)
+function promiseFromChildProcess(child) {
+	return new Promise(function (resolve, reject) {
+			child.addListener("error", reject);
+			child.addListener("exit", resolve);
+	});
+}
+
+;(async () => {
+	const serverDeps = exec('npm i',
+	    function (err, stdout, stderr) {
+	      console.log(`${stdout}`)
+	      console.log(`${stderr}`)
+	      if (err !== null) {
+	        console.log('exec error: ${err}')
+	      }
+	    }
+	  )
+	const clientDeps = exec('cd frontend; npm i',
+		function (err, stdout, stderr) {
+			console.log(`${stdout}`)
+			console.log(`${stderr}`)
+			if (err !== null) {
+				console.log('exec error: ${err}')
+			}
+		}
+	)
+	
+	try {
+		await promiseFromChildProcess(serverDeps)
+		await promiseFromChildProcess(clientDeps)
+		spinner.stop()
+	} catch (err) {
+		console.error('Problem installing dependencies!')
+		throw err
+	}
+})()
+
+
+
+// /* Installs the project dependencies */
+// ;(function installDeps (spinner) {
+//   var exec = require('child_process').exec, child
+//   child = exec('npm i',
+//     function (err, stdout, stderr) { // the callback
+//       console.log(`AA: built dependencies... ${stdout}`)
+//       console.log(`AA: dependencies... ${stderr}`)
+//       spinner.stop()
+//       if (err !== null) {
+//         console.log('exec error: ${err}')
+//       }
+//     }
+//   )
+// })(spinner)
