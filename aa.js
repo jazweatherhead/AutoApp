@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 
 /* Edit the config object with your project details */
 const config = {
