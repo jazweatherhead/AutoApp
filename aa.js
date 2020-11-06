@@ -216,51 +216,52 @@ function promiseFromChildProcess(child) {
 	});
 }
 
-;(async (spinner) => {
-	const serverDeps = exec('npm i',
-	    function (err, stdout, stderr) {
-	      console.log(`${stdout}`)
-	      console.log(`${stderr}`)
-	      if (err !== null) {
-	        console.log('exec error: ${err}')
-	      }
-	    }
-	  )
-	const clientDeps = exec('cd frontend; npm i',
-		function (err, stdout, stderr) {
-			console.log(`${stdout}`)
-			console.log(`${stderr}`)
-			if (err !== null) {
-				console.log('exec error: ${err}')
-			}
-		}
-	)
+// ;(async (spinner) => {
+// 	const serverDeps = exec('npm i',
+// 	    function (err, stdout, stderr) {
+// 	      console.log(`${stdout}`)
+// 	      console.log(`${stderr}`)
+// 	      if (err !== null) {
+// 	        console.log('exec error: ${err}')
+// 	      }
+// 	    }
+// 	  )
+// 	const clientDeps = exec('cd frontend; npm i',
+// 		function (err, stdout, stderr) {
+// 			console.log(`${stdout}`)
+// 			console.log(`${stderr}`)
+// 			if (err !== null) {
+// 				console.log('exec error: ${err}')
+// 			}
+// 		}
+// 	)
 	
-	try {
-		await promiseFromChildProcess(serverDeps)
-		console.log('AA: server dependencies installed')
-		// await promiseFromChildProcess(clientDeps)
-		// console.log('AA: client dependencies installed')
-		spinner.stop()
-	} catch (err) {
-		console.error('Problem installing dependencies!')
-		throw err
-	}
-})(spinner)
-
-
-
-// /* Installs the project dependencies */
-// ;(function installDeps (spinner) {
-//   var exec = require('child_process').exec, child
-//   child = exec('npm i',
-//     function (err, stdout, stderr) { // the callback
-//       console.log(`AA: built dependencies... ${stdout}`)
-//       console.log(`AA: dependencies... ${stderr}`)
-//       spinner.stop()
-//       if (err !== null) {
-//         console.log('exec error: ${err}')
-//       }
-//     }
-//   )
+// 	try {
+// 		await promiseFromChildProcess(serverDeps)
+// 		console.log('AA: server dependencies installed')
+// 		// await promiseFromChildProcess(clientDeps)
+// 		// console.log('AA: client dependencies installed')
+// 		spinner.stop()
+// 	} catch (err) {
+// 		console.error('Problem installing dependencies!')
+// 		throw err
+// 	}
 // })(spinner)
+
+
+
+/* Installs the project dependencies */
+;(function installDeps (spinner) {
+  var exec = require('child_process').exec, child
+  // child = exec('npm i',
+  child = exec('yarn i',
+    function (err, stdout, stderr) {
+      console.log(`AA: built dependencies... ${stdout}`)
+      console.log(`AA: dependencies... ${stderr}`)
+      spinner.stop()
+      if (err !== null) {
+        console.log('exec error: ${err}')
+      }
+    }
+  )
+})(spinner)
