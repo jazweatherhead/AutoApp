@@ -240,9 +240,9 @@ function promiseFromChildProcess(child) {
 	
 	try {
 		await promiseFromChildProcess(serverDeps)
-		console.log('AA: server dependencies installed')
-		// await promiseFromChildProcess(clientDeps)
-		// console.log('AA: client dependencies installed')
+		console.log('\nAA: server dependencies installed')
+		await promiseFromChildProcess(clientDeps)
+		console.log('\nAA: client dependencies installed')
 		spinner.stop()
 	} catch (err) {
 		console.error('Problem installing dependencies!')
