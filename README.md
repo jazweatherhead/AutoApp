@@ -28,12 +28,13 @@ Clone the repo into your empty project directory. Don't forget the trailing dot!
 ### Configure
 Edit the config object at the top of aa.js.	
 
-| config key | description                                           |
-|------------|-------------------------------------------------------|
-| name       | The site/app name.                                    |
-| dbNoun     | The thing you're using the db to store.               |
-| dbSchema   | The db field names, types and if they're required.    |
-| yarn       | True installs dependencies with yarn. False uses npm. |
+| config key     | description                                           |
+|----------------|-------------------------------------------------------|
+| name           | The site/app name.                                    |
+| dbNounSingular | The thing you're using the db to store.               |
+| dbNounPlural   | The plural of the thing you're using the db to store. |
+| dbSchema       | The db field names, types and if they're required.    |
+| yarn           | True installs dependencies with yarn. False uses npm. |
 
  Then replace the contents of `assets/` with your 
 	`favicon.ico`
