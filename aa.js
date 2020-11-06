@@ -216,37 +216,39 @@ function promiseFromChildProcess(child) {
 	});
 }
 
-// ;(async (spinner) => {
-// 	const serverDeps = exec('npm i',
-// 	    function (err, stdout, stderr) {
-// 	      console.log(`${stdout}`)
-// 	      console.log(`${stderr}`)
-// 	      if (err !== null) {
-// 	        console.log('exec error: ${err}')
-// 	      }
-// 	    }
-// 	  )
-// 	const clientDeps = exec('cd frontend; npm i',
-// 		function (err, stdout, stderr) {
-// 			console.log(`${stdout}`)
-// 			console.log(`${stderr}`)
-// 			if (err !== null) {
-// 				console.log('exec error: ${err}')
-// 			}
-// 		}
-// 	)
+;(async (spinner) => {
+	// const serverDeps = exec('npm i',
+	const serverDeps = exec('yarn install',
+	    function (err, stdout, stderr) {
+	      console.log(`${stdout}`)
+	      console.log(`${stderr}`)
+	      if (err !== null) {
+	        console.log('exec error: ${err}')
+	      }
+	    }
+	  )
+	// const clientDeps = exec('cd frontend; npm i',
+	const clientDeps = exec('cd frontend; yarn install',
+		function (err, stdout, stderr) {
+			console.log(`${stdout}`)
+			console.log(`${stderr}`)
+			if (err !== null) {
+				console.log('exec error: ${err}')
+			}
+		}
+	)
 	
-// 	try {
-// 		await promiseFromChildProcess(serverDeps)
-// 		console.log('AA: server dependencies installed')
-// 		// await promiseFromChildProcess(clientDeps)
-// 		// console.log('AA: client dependencies installed')
-// 		spinner.stop()
-// 	} catch (err) {
-// 		console.error('Problem installing dependencies!')
-// 		throw err
-// 	}
-// })(spinner)
+	try {
+		await promiseFromChildProcess(serverDeps)
+		console.log('AA: server dependencies installed')
+		// await promiseFromChildProcess(clientDeps)
+		// console.log('AA: client dependencies installed')
+		spinner.stop()
+	} catch (err) {
+		console.error('Problem installing dependencies!')
+		throw err
+	}
+})(spinner)
 
 
 
