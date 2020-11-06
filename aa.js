@@ -216,7 +216,7 @@ function promiseFromChildProcess(child) {
 	});
 }
 
-;(async () => {
+;(async (spinner) => {
 	const serverDeps = exec('npm i',
 	    function (err, stdout, stderr) {
 	      console.log(`${stdout}`)
@@ -246,7 +246,7 @@ function promiseFromChildProcess(child) {
 		console.error('Problem installing dependencies!')
 		throw err
 	}
-})()
+})(spinner)
 
 
 
