@@ -3,7 +3,6 @@ const fs = require('fs')
 /* Edit the config object with your project details */
 const config = { // TODO db stuff
   name: 'BlackCat', /* (no spaces) */
-	asset_dir: __dirname + '/assets/',
 	dbNoun: 'movies', // thing you're storing in db
 	dbDef: { // db fields, field types and if they're required
 		title: {
@@ -22,6 +21,7 @@ const config = { // TODO db stuff
 	yarn: false
 }
 
+const asset_dir = __dirname + '/assets/'
 const packMan = config.yarn ? 'yarn' : 'npm'
 
 ;(function makeNouns() {
@@ -197,16 +197,16 @@ files = [
 /* Copies the banner and favicon from assets/ to their final destination */
 ;(function copyAssets() { // TODO DRY this out
   /* favicon.ico */
-  const source_favicon = fs.createReadStream(config.asset_dir + 'favicon.ico')
+  const source_favicon = fs.createReadStream(asset_dir + 'favicon.ico')
   const favicon = fs.createWriteStream('./public/favicon.ico')
   source_favicon.pipe(favicon)
 
 	/* logos */
-  const source_logo192 = fs.createReadStream(config.asset_dir + 'logo192.png')
+  const source_logo192 = fs.createReadStream(asset_dir + 'logo192.png')
   const logo192 = fs.createWriteStream('./public/logo192.png')
 	source_logo192.pipe(logo192)
 	
-  const source_logo512 = fs.createReadStream(config.asset_dir + 'logo512.png')
+  const source_logo512 = fs.createReadStream(asset_dir + 'logo512.png')
   const logo512 = fs.createWriteStream('./public/logo512.png')
 	source_logo512.pipe(logo512)
 })()
