@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+const fs = require('fs-extra')
+const { Transform } = require('stream')
+
+const config = {
+	dbNounSingular: 'film',
+	dbNounPlural: 'films',
+	dbSchema: {
+		title: {
+			type: 'String',
+			required: true
+		},
+		director: {
+			type: 'String',
+			required: true
+		},
+		year: {
+			type: 'Number',
+			required: true
+		}
+	}
+}
+
+let lowerCaseSingular, titleCaseSingular, lowerCasePlural
+
+;(function makeNouns() {
+	lowerCaseSingular = config.dbNounSingular.toLowerCase()
+	titleCaseSingular = config.dbNounSingular[0].toUpperCase() + config.dbNounSingular.slice(1)
+	lowerCasePlural = config.dbNounPlural.toLowerCase()
+})()
+
+makeBaseModel = async () => {
+	try {
+		const writeBaseModel = await fs.createWriteStream('model/movies.js', {flags: 'a'})
+
+		await writeBaseModel.write("const mongoose = require('mongoose')\n\n")
+		// writeBaseModel.write("const " + lowerCaseSingular + "Schema = new mongoose.Schema({")
+		await writeBaseModel.write("const movieSchema = new mongoose.Schema({\n")
+		for (const key in config.dbSchema) {
+			await writeBaseModel.write(`	${key}: { type: ${config.dbSchema[key].type}, required: ${config.dbSchema[key].required}},\n`)
+		}
+		await writeBaseModel.write("})\n\n")
+		// writeBaseModel.write("mongoose.model('" + titleCaseSingular + "', " + lowerCaseSingular + "Schema) // the first param determines the collection name")
+		await writeBaseModel.write("mongoose.model('Movie', movieSchema) // the first param determines the collection name")
+	} catch (err) {
+		console.error('Problem writing base model!')
+		throw err
+	}
+}
+
+//#region process files
+const writeModel = fs.createWriteStream(`model/${lowerCasePlural}.js`)
+
+
+const TransformStream = new Transform({
+	transform(chunk, encoding, callback) {
+		// console.log('before: ', chunk.toString())
+	
+		const reNewLine = /\n/g
+		const reTab = /\t/g
+		const reQuote = /'/g
+		const reDQuote = /"/g
+		const reLcNoun = /movie/g // lower case noun
+		const reTcNoun = /Movie/g // title case noun
+		const newChunk = chunk.toString()
+			// .replace(reNewLine, '\\n')
+			// .replace(reTab, '\\t')
+			// .replace(reQuote, "\\'")
+			// .replace(reDQuote, '\\"')
+			.replace(reLcNoun, lowerCaseSingular)
+			.replace(reTcNoun, titleCaseSingular)
+		
+		writeModel.write(`${newChunk}`)
+		
+		// console.log('after: ', newChunk)
+		callback()
+	}
+})
+
+const makeModel = async () => {
+	await makeBaseModel()
+	await fs.createReadStream(`/Users/jaz/CODE/React/aa-1.5/model/movies.js`)
+		.pipe(TransformStream)
+	TransformStream.resume() // TODO still leaking...
+}
+makeModel()
+
+//#endregion

@@ -44,12 +44,12 @@ const TransformStream = new Transform({
 		const reLcNoun = /movie/g // lower case noun
 		const reTcNoun = /Movie/g // title case noun
 		const newChunk = chunk.toString()
-											.replace(reNewLine, '\\n')
-											.replace(reTab, '\\t')
-											.replace(reQuote, "\\'")
-											.replace(reDQuote, '\\"')
-											.replace(reLcNoun, '" + lowerCaseSingular + "')
-											.replace(reTcNoun, '" + titleCaseSingular + "')
+			.replace(reNewLine, '\\n')
+			.replace(reTab, '\\t')
+			.replace(reQuote, "\\'")
+			.replace(reDQuote, '\\"')
+			.replace(reLcNoun, '" + lowerCaseSingular + "')
+			.replace(reTcNoun, '" + titleCaseSingular + "')
 		
 		writeMe.write(`  content: "${newChunk}"},\n`)
 		

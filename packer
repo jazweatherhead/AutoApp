@@ -48,8 +48,12 @@ const TransformStream = new Transform({
 		const reTab = /\t/g
 		const reQuote = /'/g
 		const reDQuote = /"/g
-		const newChunk = chunk.toString().replace(reNewLine, '\\n').replace(reTab, '\\t').replace(reQuote, "\\'").replace(reDQuote, '\\"')
-		
+		const newChunk = chunk.toString()
+			.replace(reNewLine, '\\n')
+			.replace(reTab, '\\t')
+			.replace(reQuote, "\\'")
+			.replace(reDQuote, '\\"')
+			
 		writeMe.write(`  content: "${newChunk}"},\n`)
 		
 		// console.log('after: ', newChunk)
