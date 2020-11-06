@@ -219,8 +219,8 @@ function promiseFromChildProcess(child) {
 const exec = require('child_process').exec
 
 ;(async (spinner) => {
-	// const serverDeps = exec('npm i',
-	const serverDeps = exec('yarn install',
+	const serverDeps = exec('npm i',
+	// const serverDeps = exec('yarn install',
 	    function (err, stdout, stderr) {
 	      console.log(`${stdout}`)
 	      console.log(`${stderr}`)
@@ -229,8 +229,8 @@ const exec = require('child_process').exec
 	      }
 	    }
 	  )
-	// const clientDeps = exec('cd frontend; npm i',
-	const clientDeps = exec('cd frontend; yarn install',
+	const clientDeps = exec('cd frontend; npm i',
+	// const clientDeps = exec('cd frontend; yarn install',
 		function (err, stdout, stderr) {
 			console.log(`${stdout}`)
 			console.log(`${stderr}`)
