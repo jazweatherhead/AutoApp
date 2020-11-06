@@ -247,7 +247,7 @@ const exec = require('child_process').exec
 		await promiseFromChildProcess(clientDeps)
 		console.log('\nAA: client dependencies installed')
 		spinner.stop()
-		console.log('\n\nAutoApp installed!\n\n\'npm run dev\' to begin.')
+		console.log('\n\nApp generation completed successfully.\n\n\'npm run dev\' to begin.')
 	} catch (err) {
 		console.error('Problem installing dependencies!')
 		throw err
