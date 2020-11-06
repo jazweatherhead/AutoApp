@@ -41,7 +41,7 @@ ${schema}
 })
 mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first param determines the collection name
 `
-// console.log(`\n${model}`)
+console.log(`\n${model}`)
 	return model
 }
 
@@ -51,17 +51,24 @@ packModel = async () => {
 		await writeModel.write(`{ file: 'api/models/${lowerCasePlural}.js',\n  content: `)
 		
 		const model = makeModel()
-		
+
 		const reNewLine = /\n/g
 		const reTab = /\t/g
 		const reQuote = /'/g
 		
 		const packedModel = 
-			'"' + model
-				.replace(reNewLine, '\\n')
-				.replace(reTab, '\\t')
-				.replace(reQuote, "\\'")
-			+ '"'
+		'"' + model
+		.replace(reNewLine, '\\n')
+		.replace(reTab, '\\t')
+		.replace(reQuote, "\\'")
+		+ '"'
+		
+		console.log(packedModel)
+		
+		const objModel = {
+			file: `'api/models/${lowerCasePlural}.js'`,
+			content: packedModel
+		}
 		
 		await writeModel.write(packedModel)
 		await writeModel.write('},')
