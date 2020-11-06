@@ -2,7 +2,8 @@ const fs = require('fs')
 
 /* Edit the config object with your project details */
 const config = {
-  name: 'BlackCat', /* (no spaces) */
+	name: 'BlackCat', /* (no spaces) */
+	yarn: false,
 	dbNounSingular: 'movie', // thing you're storing in db
 	dbNounPlural: 'movies',
 	dbSchema: { // TODO db fields, field types and if they're required
@@ -18,8 +19,7 @@ const config = {
 			type: 'number',
 			required: true
 		}
-	},
-	yarn: false
+	}
 }
 
 const asset_dir = __dirname + '/assets/'
