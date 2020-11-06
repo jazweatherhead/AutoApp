@@ -19,7 +19,7 @@ const config = { // TODO db stuff
 			required: true
 		}
 	},
-	yarn: true
+	yarn: false
 }
 
 const packMan = config.yarn ? 'yarn' : 'npm'
