@@ -5,7 +5,7 @@ const config = { // TODO db stuff
   name: 'BlackCat', /* (no spaces) */
 	asset_dir: __dirname + '/assets/',
 	dbNoun: 'movies', // thing you're storing in db
-	dbDef: {
+	dbDef: { // db fields, field types and if they're required
 		title: {
 			type: 'string',
 			required: true
@@ -18,8 +18,11 @@ const config = { // TODO db stuff
 			type: 'number',
 			required: true
 		}
-	}
+	},
+	yarn: true
 }
+
+const packMan = config.yarn ? 'yarn' : 'npm'
 
 ;(function makeNouns() {
 	const lowerCase = config.dbNoun.toLowerCase()
@@ -219,8 +222,7 @@ function promiseFromChildProcess(child) {
 const exec = require('child_process').exec
 
 ;(async (spinner) => {
-	// const serverDeps = exec('npm i',
-	const serverDeps = exec('yarn install',
+	const serverDeps = exec(`${packMan} install`,
 	    function (err, stdout, stderr) {
 	      console.log(`${stdout}`)
 	      console.log(`${stderr}`)
@@ -229,8 +231,7 @@ const exec = require('child_process').exec
 	      }
 	    }
 	  )
-	// const clientDeps = exec('cd frontend; npm i',
-	const clientDeps = exec('cd frontend; yarn install',
+	const clientDeps = exec(`cd frontend; ${packMan} install`,
 		function (err, stdout, stderr) {
 			console.log(`${stdout}`)
 			console.log(`${stderr}`)
