@@ -58,4 +58,4 @@ Make sure Mongo is running locally, then...
 
 `$ npm start` (production)
 
-**All done! Your app is live on [localhost:3000](localhost:3000)**
+***All done! Your app is live on [localhost:3000](localhost:3000)***
