@@ -48,7 +48,7 @@ Edit the config object at the top of aa.js.
 
 `$ node aa`
 
-### Usage
+### Commands
 
 Make sure Mongo is running locally, then...
 
