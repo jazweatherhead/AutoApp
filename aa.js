@@ -23,11 +23,12 @@ const config = { // TODO db stuff
 
 const asset_dir = __dirname + '/assets/'
 const packMan = config.yarn ? 'yarn' : 'npm'
+let lowerCase, upperCase, titleCase
 
 ;(function makeNouns() {
-	const lowerCase = config.dbNoun.toLowerCase()
-	const upperCase = config.dbNoun.toUpperCase()
-	const titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
+	lowerCase = config.dbNoun.toLowerCase()
+	upperCase = config.dbNoun.toUpperCase()
+	titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
 })()
 
 /* Setup spinner */
