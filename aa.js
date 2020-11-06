@@ -251,21 +251,3 @@ const exec = require('child_process').exec
 		throw err
 	}
 })(spinner)
-
-
-
-// /* Installs the project dependencies */
-// ;(function installDeps (spinner) {
-//   var exec = require('child_process').exec, child
-//   // child = exec('npm i',
-//   child = exec('yarn install',
-//     function (err, stdout, stderr) {
-//       console.log(`AA: built dependencies... ${stdout}`)
-//       console.log(`AA: dependencies... ${stderr}`)
-//       spinner.stop()
-//       if (err !== null) {
-//         console.log('exec error: ${err}')
-//       }
-//     }
-//   )
-// })(spinner)
