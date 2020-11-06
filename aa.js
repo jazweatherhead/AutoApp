@@ -3,7 +3,8 @@ const fs = require('fs')
 /* Edit the config object with your project details */
 const config = { // TODO db stuff
   name: 'BlackCat', /* (no spaces) */
-	dbNoun: 'movies', // thing you're storing in db
+	dbNounSingular: 'movie', // thing you're storing in db
+	dbNounPlural: 'movies',
 	dbDef: { // db fields, field types and if they're required
 		title: {
 			type: 'string',
@@ -23,12 +24,15 @@ const config = { // TODO db stuff
 
 const asset_dir = __dirname + '/assets/'
 const packMan = config.yarn ? 'yarn' : 'npm'
-let lowerCase, upperCase, titleCase
+let lowerCaseSingular, upperCaseSingular, titleCaseSingular, lowerCasePlural, upperCasePlural, titleCasePlural
 
 ;(function makeNouns() {
-	lowerCase = config.dbNoun.toLowerCase()
-	upperCase = config.dbNoun.toUpperCase()
-	titleCase = config.dbNoun[0].toUpperCase() + config.dbNoun.slice(1)
+	lowerCaseSingular = config.dbNounSingular.toLowerCase()
+	upperCaseSingular = config.dbNounSingular.toUpperCase()
+	titleCaseSingular = config.dbNounSingular[0].toUpperCase() + config.dbNoun.slice(1)
+	lowerCasePlural = config.dbNounPlural.toLowerCase()
+	upperCasePlural = config.dbNounPlural.toUpperCase()
+	titleCasePlural = config.dbNounPlural[0].toUpperCase() + config.dbNoun.slice(1)
 })()
 
 /* Setup spinner */
@@ -85,7 +89,7 @@ const dirs = [
 /* Files to be built - You can add your own entries to customize the generator */
 files = [
 	{ file: '.env',
-  content: "#Change MONGODB_URI to your production db\nMONGODB_URI = mongodb://localhost/" + upperCase +"_DB\nPORT = 9000"},
+  content: "#Change MONGODB_URI to your production db\nMONGODB_URI = mongodb://localhost/" + upperCasePlural +"_DB\nPORT = 9000"},
 { file: 'app.js',
   content: "const express = require(\'express\');\nconst path = require(\'path\');\nconst createError = require(\'http-errors\');\nconst cookieParser = require(\'cookie-parser\');\nconst logger = require(\'morgan\');\nconst sassMiddleware = require(\'node-sass-middleware\');\nconst favicon = require(\'serve-favicon\');\nrequire(\'dotenv\').config();\nrequire(\'./api/models/db\');\n\nconst routes = require(\'./app/routes/index\');\nconst routesApi = require(\'./api/routes/index\');\n\nconst app = express();\n\n// view engine setup\napp.set(\'views\', path.join(__dirname, \'app\', \'views\'));\napp.set(\'view engine\', \'pug\');\n\napp.use(favicon(__dirname + \'/public/favicon.ico\'));\napp.use(logger(\'dev\'));\napp.use(express.json());\napp.use(express.urlencoded({ extended: false }));\napp.use(cookieParser());\napp.use(sassMiddleware({\n  src: path.join(__dirname, \'public\'),\n  dest: path.join(__dirname, \'public\'),\n  indentedSyntax: false, // true = .sass and false = .scss\n  sourceMap: true\n}));\napp.use(express.static(path.join(__dirname, \'public\')));\n\napp.use(\'/\', routes);\napp.use(\'/api\', routesApi);\n\n// catch 404 and forward to error handler\napp.use(function(req, res, next) {\n  next(createError(404));\n});\n\n// error handler\napp.use(function(err, req, res, next) {\n  // set locals, only providing error in development\n  res.locals.message = err.message;\n  res.locals.error = req.app.get(\'env\') === \'development\' ? err : {};\n\n  // render the error page\n  res.status(err.status || 500);\n  res.render(\'error\');\n});\n\nmodule.exports = app;\n"},
 { file: 'package.json',
@@ -165,7 +169,7 @@ files = [
 { file: 'api/routes/index.js',
   content: "var express = require(\'express\');\nvar router = express.Router();\nvar ctrlMovies = require(\'../controllers/movies\');\n\n/* Movies */\nrouter.get(\'/movies\', ctrlMovies.moviesList); // list all\nrouter.post(\'/movies\', ctrlMovies.moviesCreate); // C\nrouter.get(\'/movies/:movieid\', ctrlMovies.moviesReadOne); // R\nrouter.put(\'/movies/:movieid\', ctrlMovies.moviesUpdateOne); // U\nrouter.delete(\'/movies/:movieid\', ctrlMovies.moviesDeleteOne); // D\n\nmodule.exports = router;"},
 { file: 'api/models/db.js',
-  content: "const mongoose = require(\'mongoose\');\n\n/*Set URI*/\nconst dbName = \'" + upperCase +"_DB\';\nlet dbUri = `mongodb://localhost/${dbName}`;\n\nif (process.env.NODE_ENV === \'production\') {\n  console.log(\'You are running in production!\');\n  dbUri = process.env.MONGODB_URI;\n}\nif (process.env.NODE_ENV === \'development\') {\n  console.log(\'You are running in development!\');\n}\n\n/*DB Connect*/\nmongoose.connect(\n\tdbUri, \n\t{\n\t\tuseNewUrlParser: true,\n\t\tuseFindAndModify: false,\n\t\tuseUnifiedTopology: true\n\t}\n);\n\n/*Event Logs*/\nmongoose.connection.on(\'connected\', function () {\n  console.log(\'Mongoose connected to \' + dbUri);\n});\nmongoose.connection.on(\'error\', function (err) {\n  console.log(\'Mongoose connection error: \' + err);\n});\nmongoose.connection.on(\'disconnected\', function () {\n  console.log(\'Mongoose disconnected\');\n});\n\nconst gracefulShutdown = function (msg, callback) {\n  mongoose.connection.close(function () {\n    console.log(\'Mongoose disconnected through \' + msg);\n    callback();\n  });\n};\n\n/*Use gracefulShutdown()*/\nprocess.once(\'SIGUSR2\', function () {\n  gracefulShutdown(\'nodemon\', function () {\n    process.kill(process.pid, \'SIGUSR2\');\n  });\n});\nprocess.on(\'SIGINT\', function () {\n  gracefulShutdown(\'app termination\', function () {\n    process.exit(0);\n  });\n});\nprocess.on(\'SIGTERM\', function () { // TODO necessary?\n  gracefulShutdown(\'Heroku app shutdown\', function () {\n    process.exit(0);\n  });\n});\n\nrequire(\'./movies\');"},
+  content: "const mongoose = require(\'mongoose\');\n\n/*Set URI*/\nconst dbName = \'" + upperCasePlural +"_DB\';\nlet dbUri = `mongodb://localhost/${dbName}`;\n\nif (process.env.NODE_ENV === \'production\') {\n  console.log(\'You are running in production!\');\n  dbUri = process.env.MONGODB_URI;\n}\nif (process.env.NODE_ENV === \'development\') {\n  console.log(\'You are running in development!\');\n}\n\n/*DB Connect*/\nmongoose.connect(\n\tdbUri, \n\t{\n\t\tuseNewUrlParser: true,\n\t\tuseFindAndModify: false,\n\t\tuseUnifiedTopology: true\n\t}\n);\n\n/*Event Logs*/\nmongoose.connection.on(\'connected\', function () {\n  console.log(\'Mongoose connected to \' + dbUri);\n});\nmongoose.connection.on(\'error\', function (err) {\n  console.log(\'Mongoose connection error: \' + err);\n});\nmongoose.connection.on(\'disconnected\', function () {\n  console.log(\'Mongoose disconnected\');\n});\n\nconst gracefulShutdown = function (msg, callback) {\n  mongoose.connection.close(function () {\n    console.log(\'Mongoose disconnected through \' + msg);\n    callback();\n  });\n};\n\n/*Use gracefulShutdown()*/\nprocess.once(\'SIGUSR2\', function () {\n  gracefulShutdown(\'nodemon\', function () {\n    process.kill(process.pid, \'SIGUSR2\');\n  });\n});\nprocess.on(\'SIGINT\', function () {\n  gracefulShutdown(\'app termination\', function () {\n    process.exit(0);\n  });\n});\nprocess.on(\'SIGTERM\', function () { // TODO necessary?\n  gracefulShutdown(\'Heroku app shutdown\', function () {\n    process.exit(0);\n  });\n});\n\nrequire(\'./movies\');"},
 { file: 'api/models/movies.js',
   content: "const mongoose = require(\'mongoose\');\n\nconst movieSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  year: { type:Number, required: true },\n  director: { type:String, required: true }\n});\n\nmongoose.model(\'Movie\', movieSchema); // the first param determines the collection name"},
 { file: 'api/controllers/movies.js',
