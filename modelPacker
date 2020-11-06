@@ -4,21 +4,14 @@ const { Transform } = require('stream')
 const readdirp = require('readdirp')
 
 //#region get files, dirs
-let files, dirs, fileNames, dirNames
+let files, fileNames
 
-const getDirs = async () => {
-	try {
-		dirs = await readdirp.promise('./test', {
-			root: './',
-			type: 'directories',
-			directoryFilter: [ '!.git', '!*modules' ],
-			alwaysStat: true
-		})
-		dirNames = dirs.map(dir => dir.path)
-	} catch (err) {
-		throw err
-	}
-}
+//TODO get lowerCaseSingular, titleCaseSingular, lowerCasePlural
+const lowerCaseSingular = 'film'
+const titleCaseSingular = 'Film'
+const lowerCasePlural = 'films'
+
+//TODO file name: lowerCasePlural.js
 
 const getFiles = async () => {
 	try {
@@ -48,7 +41,15 @@ const TransformStream = new Transform({
 		const reTab = /\t/g
 		const reQuote = /'/g
 		const reDQuote = /"/g
-		const newChunk = chunk.toString().replace(reNewLine, '\\n').replace(reTab, '\\t').replace(reQuote, "\\'").replace(reDQuote, '\\"')
+		const reLcNoun = /movie/g // lower case noun
+		const reTcNoun = /Movie/g // title case noun
+		const newChunk = chunk.toString()
+											.replace(reNewLine, '\\n')
+											.replace(reTab, '\\t')
+											.replace(reQuote, "\\'")
+											.replace(reDQuote, '\\"')
+											.replace(reLcNoun, '" + lowerCaseSingular + "')
+											.replace(reTcNoun, '" + titleCaseSingular + "')
 		
 		writeMe.write(`  content: "${newChunk}"},\n`)
 		
@@ -70,16 +71,5 @@ const processFiles = async () => {
 	}
 }
 processFiles()
-
-const processDirs = async () => {
-	await getDirs()
-	writeMe.write(`let dirs = [\n`)
-	for (const dir of dirNames) {
-		console.log(dir)
-			writeMe.write(`\t'${dir}',\n`)
-	}
-	writeMe.write(`]\n\n`)
-}
-processDirs()
 
 //#endregion

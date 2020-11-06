@@ -8,15 +8,15 @@ const config = {
 	dbNounPlural: 'movies',
 	dbSchema: { // TODO db fields, field types and if they're required
 		title: {
-			type: 'string',
+			type: 'String',
 			required: true
 		},
 		director: {
-			type: 'string',
+			type: 'String',
 			required: true
 		},
 		year: {
-			type: 'number',
+			type: 'Number',
 			required: true
 		}
 	}
