@@ -29,10 +29,10 @@ let lowerCaseSingular, upperCaseSingular, titleCaseSingular, lowerCasePlural, up
 ;(function makeNouns() {
 	lowerCaseSingular = config.dbNounSingular.toLowerCase()
 	upperCaseSingular = config.dbNounSingular.toUpperCase()
-	titleCaseSingular = config.dbNounSingular[0].toUpperCase() + config.dbNoun.slice(1)
+	titleCaseSingular = config.dbNounSingular[0].toUpperCase() + config.dbNounSingular.slice(1)
 	lowerCasePlural = config.dbNounPlural.toLowerCase()
 	upperCasePlural = config.dbNounPlural.toUpperCase()
-	titleCasePlural = config.dbNounPlural[0].toUpperCase() + config.dbNoun.slice(1)
+	titleCasePlural = config.dbNounPlural[0].toUpperCase() + config.dbNounPlural.slice(1)
 })()
 
 /* Setup spinner */
