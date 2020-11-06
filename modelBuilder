@@ -29,28 +29,51 @@ let lowerCaseSingular, titleCaseSingular, lowerCasePlural
 	lowerCasePlural = config.dbNounPlural.toLowerCase()
 })()
 
-makeBaseModel = async () => {
-	try {
-		const writeBaseModel = await fs.createWriteStream('model/movies.js', {flags: 'a'})
+makeModel = () => {
+	let schema = ''
+	for (const key in config.dbSchema) {
+		schema += `	${key}: { type: ${config.dbSchema[key].type}, required: ${config.dbSchema[key].required}},\n`
+	}
 
-		await writeBaseModel.write("const mongoose = require('mongoose')\n\n")
-		// writeBaseModel.write("const " + lowerCaseSingular + "Schema = new mongoose.Schema({")
-		await writeBaseModel.write("const movieSchema = new mongoose.Schema({\n")
-		for (const key in config.dbSchema) {
-			await writeBaseModel.write(`	${key}: { type: ${config.dbSchema[key].type}, required: ${config.dbSchema[key].required}},\n`)
-		}
-		await writeBaseModel.write("})\n\n")
-		// writeBaseModel.write("mongoose.model('" + titleCaseSingular + "', " + lowerCaseSingular + "Schema) // the first param determines the collection name")
-		await writeBaseModel.write("mongoose.model('Movie', movieSchema) // the first param determines the collection name")
+	const model = `const mongoose = require('mongoose')
+
+const ${lowerCaseSingular}Schema = new mongoose.Schema({
+${schema}
+})
+mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first param determines the collection name
+`
+// console.log(`\n${model}`)
+	return model
+}
+
+packModel = async () => {
+	try {
+		const writeModel = await fs.createWriteStream(`model/${lowerCasePlural}.packed.js`, {flags: 'a'})
+		await writeModel.write("{ file: 'app.js',\n  content: ")
+		
+		const model = makeModel()
+		
+		const reNewLine = /\n/g
+		const reTab = /\t/g
+		const reQuote = /'/g
+		
+		const packedModel = 
+			'"' + model
+				.replace(reNewLine, '\\n')
+				.replace(reTab, '\\t')
+				.replace(reQuote, "\\'")
+			+ '"'
+		
+		await writeModel.write(packedModel)
+		await writeModel.write('},')
 	} catch (err) {
-		console.error('Problem writing base model!')
+		console.error('Problem packing model!')
 		throw err
 	}
 }
+packModel()
 
 //#region process files
-const writeModel = fs.createWriteStream(`model/${lowerCasePlural}.js`)
-
 
 const TransformStream = new Transform({
 	transform(chunk, encoding, callback) {
@@ -60,15 +83,11 @@ const TransformStream = new Transform({
 		const reTab = /\t/g
 		const reQuote = /'/g
 		const reDQuote = /"/g
-		const reLcNoun = /movie/g // lower case noun
-		const reTcNoun = /Movie/g // title case noun
 		const newChunk = chunk.toString()
-			// .replace(reNewLine, '\\n')
-			// .replace(reTab, '\\t')
-			// .replace(reQuote, "\\'")
-			// .replace(reDQuote, '\\"')
-			.replace(reLcNoun, lowerCaseSingular)
-			.replace(reTcNoun, titleCaseSingular)
+			.replace(reNewLine, '\\n')
+			.replace(reTab, '\\t')
+			.replace(reQuote, "\\'")
+			.replace(reDQuote, '\\"')
 		
 		writeModel.write(`${newChunk}`)
 		
@@ -77,12 +96,12 @@ const TransformStream = new Transform({
 	}
 })
 
-const makeModel = async () => {
-	await makeBaseModel()
-	await fs.createReadStream(`/Users/jaz/CODE/React/aa-1.5/model/movies.js`)
-		.pipe(TransformStream)
-	TransformStream.resume() // TODO still leaking...
-}
-makeModel()
+// const makeModel = async () => {
+// 	await makeBaseModel()
+// 	await fs.createReadStream(`/Users/jaz/CODE/React/aa-1.5/model/movies.js`)
+// 		.pipe(TransformStream)
+// 	TransformStream.resume() // TODO still leaking...
+// }
+// makeModel()
 
 //#endregion
