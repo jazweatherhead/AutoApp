@@ -265,8 +265,8 @@ appBuilder()
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		await src.pipe(dest)
 		dest.end()
-		chalk.greenBright(console.log('AA: Assets Copied!'))
 	}
+	chalk.greenBright(console.log('AA: Assets Copied!'))
 })()
 
 /* Installs the project dependencies */
