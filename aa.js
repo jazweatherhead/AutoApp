@@ -122,14 +122,19 @@ const dirs = [
 ]
 
 /* Makes the project directories */
-;(function dirMaker(dirs) {
+;(async function dirMaker(dirs) {
 	how_many_dirs = dirs.length
 	for (let x = 0; x < how_many_dirs; x++) {
-		if (!fs.existsSync(`${dirs[x]}/`)) {
-			fs.mkdirSync(`${dirs[x]}/`)
-			console.log(`AA: built ${dirs[x]}/`)
-		} else {
-			console.log(`AA: skipping ${dirs[x]}/`)
+		try {
+			if (!fs.existsSync(`${dirs[x]}/`)) {
+				await fs.mkdirSync(`${dirs[x]}/`)
+				console.log(`AA: created ${dirs[x]}/`)
+			} else {
+				console.log(`AA: skipping ${dirs[x]}/`)
+			}
+		} catch (err) {
+			console.error('Problem creating directories.')
+			throw err
 		}
 	}
 })(dirs)
@@ -226,20 +231,26 @@ finalModel
 ]
 
 /* Makes the project files */
-;(function fileMaker(files) {
+;(async function fileMaker(files) {
 	how_many_files = files.length
 	for (let x = 0; x < how_many_files; x++) {
-		fs.writeFile(
-			`${files[x].file}`, 
-			`${files[x].content}`, 
-			function(err) {
-				if (err) {
-					console.log(`AA: error building ${files[x].file}`)
-					return console.log(err)
-				} else {
-					console.log(`AA: built ${files[x].file}`)
-				}
-		})
+		try {
+			await fs.writeFile(
+				`${files[x].file}`, 
+				`${files[x].content}`, 
+				function(err) {
+					if (err) {
+						console.log(`AA: error writing ${files[x].file}`)
+						return console.log(err)
+					} else {
+						console.log(`AA: wrote ${files[x].file}`)
+					}
+			})
+		} catch (err) {
+			console.error('Problem writing files.')
+			throw err
+		}
+		console.log('AA: Files Created!')
 	}
 })(files)
 
@@ -258,6 +269,7 @@ finalModel
 		const src = fs.createReadStream(asset_dir + asset.name)
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		src.pipe(dest)
+		src.end()
 	}
 })()
 

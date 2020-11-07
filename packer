@@ -69,7 +69,7 @@ const processFiles = async () => {
 				writeMe.write(`{ file: '${file[0]}',\n`)
 			})
 		.pipe(TransformStream)
-		TransformStream.resume() // TODO still leaking...
+		.end()
 	}
 }
 processFiles()
@@ -82,6 +82,7 @@ const processDirs = async () => {
 			writeMe.write(`\t'${dir}',\n`)
 	}
 	writeMe.write(`]\n\n`)
+	writeMe.end()
 }
 processDirs()
 
