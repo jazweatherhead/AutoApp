@@ -1,5 +1,4 @@
 const fs = require('fs-extra')
-const chalk = require('chalk')
 
 /* Edit the config object with your project details */
 const config = {
@@ -219,10 +218,10 @@ async function dirMaker() {
 				await fs.mkdirSync(`${dirs[x]}/`)
 				console.log(`AA: created ${dirs[x]}/`)
 			} else {
-				chalk.greenBright(console.log(`AA: skipping ${dirs[x]}/`))
+				console.log(`AA: skipping ${dirs[x]}/`)
 			}
 		} catch (err) {
-			chalk.greenBright(console.error('AA: Problem creating directories.'))
+			console.error('AA: Problem creating directories.')
 			throw err
 		}
 	}
@@ -236,7 +235,7 @@ async function fileMaker() {
 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
 			console.log(`AA: wrote ${files[x].file}`)
 		} catch (err) {
-			chalk.greenBright(console.log(`AA: error writing ${files[x].file}`))
+			console.log(`AA: error writing ${files[x].file}`)
 		}
 	}
 	console.log('AA: Files Created!')
@@ -245,7 +244,7 @@ async function fileMaker() {
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	chalk.greenBright(console.log('AA: App Structure Created!'))
+	console.log('AA: App Structure Created!')
 }
 appBuilder()
 
@@ -266,7 +265,7 @@ appBuilder()
 		await src.pipe(dest)
 		dest.end()
 	}
-	chalk.greenBright(console.log('AA: Assets Copied!'))
+	console.log('AA: Assets Copied!')
 })()
 
 /* Installs the project dependencies */
@@ -301,13 +300,13 @@ const exec = require('child_process').exec
 	
 	try {
 		await promiseFromChildProcess(serverDeps)
-		chalk.greenBright(console.log('\nAA: server dependencies installed'))
+		console.log('\nAA: server dependencies installed')
 		await promiseFromChildProcess(clientDeps)
-		chalk.greenBright(console.log('\nAA: client dependencies installed'))
+		console.log('\nAA: client dependencies installed')
 		spinner.stop()
-		chalk.greenBright(console.log('\n\nApp generation completed successfully.\n\n\'npm run dev\' to begin.'))
+		console.log('\n\nApp generation completed successfully.\n\n\'npm run dev\' to begin.')
 	} catch (err) {
-		chalk.redBright(console.error('Problem installing dependencies!'))
+		console.error('Problem installing dependencies!')
 		throw err
 	}
 })(spinner)
