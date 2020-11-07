@@ -1,4 +1,5 @@
 const fs = require('fs-extra')
+const chalk = require('chalk')
 
 /* Edit the config object with your project details */
 const config = {
@@ -218,10 +219,10 @@ async function dirMaker() {
 				await fs.mkdirSync(`${dirs[x]}/`)
 				console.log(`AA: created ${dirs[x]}/`)
 			} else {
-				console.log(`AA: skipping ${dirs[x]}/`)
+				chalk.greenBright(console.log(`AA: skipping ${dirs[x]}/`))
 			}
 		} catch (err) {
-			console.error('AA: Problem creating directories.')
+			chalk.greenBright(console.error('AA: Problem creating directories.'))
 			throw err
 		}
 	}
@@ -235,7 +236,7 @@ async function fileMaker() {
 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
 			console.log(`AA: wrote ${files[x].file}`)
 		} catch (err) {
-			console.log(`AA: error writing ${files[x].file}`)
+			chalk.greenBright(console.log(`AA: error writing ${files[x].file}`))
 		}
 	}
 	console.log('AA: Files Created!')
@@ -244,7 +245,7 @@ async function fileMaker() {
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	console.log('AA: App Structure Created!')
+	chalk.greenBright(console.log('AA: App Structure Created!'))
 }
 appBuilder()
 
@@ -262,8 +263,9 @@ appBuilder()
 	for (const asset of assets) {
 		const src = fs.createReadStream(asset_dir + asset.name)
 		const dest = fs.createWriteStream(asset.dest + asset.name)
-		src.pipe(dest)
+		await src.pipe(dest)
 		dest.end()
+		chalk.greenBright(console.log('AA: Assets Copied!'))
 	}
 })()
 
@@ -299,13 +301,13 @@ const exec = require('child_process').exec
 	
 	try {
 		await promiseFromChildProcess(serverDeps)
-		console.log('\nAA: server dependencies installed')
+		chalk.greenBright(console.log('\nAA: server dependencies installed'))
 		await promiseFromChildProcess(clientDeps)
-		console.log('\nAA: client dependencies installed')
+		chalk.greenBright(console.log('\nAA: client dependencies installed'))
 		spinner.stop()
-		console.log('\n\nApp generation completed successfully.\n\n\'npm run dev\' to begin.')
+		chalk.greenBright(console.log('\n\nApp generation completed successfully.\n\n\'npm run dev\' to begin.'))
 	} catch (err) {
-		console.error('Problem installing dependencies!')
+		chalk.redBright(console.error('Problem installing dependencies!'))
 		throw err
 	}
 })(spinner)
