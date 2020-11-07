@@ -269,7 +269,7 @@ finalModel
 		const src = fs.createReadStream(asset_dir + asset.name)
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		src.pipe(dest)
-		src.end()
+		dest.end()
 	}
 })()
 
