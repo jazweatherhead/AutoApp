@@ -6,7 +6,7 @@ const config = {
 	yarn: false,
 	dbNounSingular: 'movie', // thing you're storing in db
 	dbNounPlural: 'movies',
-	dbSchema: { // TODO db fields, field types and if they're required
+	dbSchema: { // db fields, field types and if they're required
 		title: {
 			type: 'String',
 			required: true
