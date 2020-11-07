@@ -1,7 +1,6 @@
 .DS_Store
 .vscode
 *.log
-*.lock
 model/
 node_modules/
 template/
