@@ -264,7 +264,6 @@ appBuilder()
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		await src.pipe(dest)
 	}
-	dest.end()
 	console.log('AA: Assets Copied!')
 })()
 
