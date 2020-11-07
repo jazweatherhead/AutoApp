@@ -121,24 +121,6 @@ const dirs = [
 	'api/routes',
 ]
 
-/* Makes the project directories */
-;(async function dirMaker(dirs) {
-	how_many_dirs = dirs.length
-	for (let x = 0; x < how_many_dirs; x++) {
-		try {
-			if (!fs.existsSync(`${dirs[x]}/`)) {
-				await fs.mkdirSync(`${dirs[x]}/`)
-				console.log(`AA: created ${dirs[x]}/`)
-			} else {
-				console.log(`AA: skipping ${dirs[x]}/`)
-			}
-		} catch (err) {
-			console.error('Problem creating directories.')
-			throw err
-		}
-	}
-})(dirs)
-
 /* Files to be built - You can add your own entries to customize the generator */
 files = [
 { file: '.env',
@@ -223,49 +205,79 @@ files = [
   content: "var express = require(\'express\');\nvar router = express.Router();\nvar ctrl" + titleCasePlural + " = require(\'../controllers/" + lowerCasePlural + "\');\n\n/* " + titleCasePlural + " */\nrouter.get(\'/" + lowerCasePlural + "\', ctrl" + titleCasePlural + "." + lowerCasePlural + "List); // list all\nrouter.post(\'/" + lowerCasePlural + "\', ctrl" + titleCasePlural + "." + lowerCasePlural + "Create); // C\nrouter.get(\'/" + lowerCasePlural + "/:" + lowerCaseSingular + "id\', ctrl" + titleCasePlural + "." + lowerCasePlural + "ReadOne); // R\nrouter.put(\'/" + lowerCasePlural + "/:" + lowerCaseSingular + "id\', ctrl" + titleCasePlural + "." + lowerCasePlural + "UpdateOne); // U\nrouter.delete(\'/" + lowerCasePlural + "/:" + lowerCaseSingular + "id\', ctrl" + titleCasePlural + "." + lowerCasePlural + "DeleteOne); // D\n\nmodule.exports = router;"},
 { file: 'api/models/db.js',
   content: "const mongoose = require(\'mongoose\');\n\n/*Set URI*/\nconst dbName = \'" + upperCasePlural +"_DB\';\nlet dbUri = `mongodb://localhost/${dbName}`;\n\nif (process.env.NODE_ENV === \'production\') {\n  console.log(\'You are running in production!\');\n  dbUri = process.env.MONGODB_URI;\n}\nif (process.env.NODE_ENV === \'development\') {\n  console.log(\'You are running in development!\');\n}\n\n/*DB Connect*/\nmongoose.connect(\n\tdbUri, \n\t{\n\t\tuseNewUrlParser: true,\n\t\tuseFindAndModify: false,\n\t\tuseUnifiedTopology: true\n\t}\n);\n\n/*Event Logs*/\nmongoose.connection.on(\'connected\', function () {\n  console.log(\'Mongoose connected to \' + dbUri);\n});\nmongoose.connection.on(\'error\', function (err) {\n  console.log(\'Mongoose connection error: \' + err);\n});\nmongoose.connection.on(\'disconnected\', function () {\n  console.log(\'Mongoose disconnected\');\n});\n\nconst gracefulShutdown = function (msg, callback) {\n  mongoose.connection.close(function () {\n    console.log(\'Mongoose disconnected through \' + msg);\n    callback();\n  });\n};\n\n/*Use gracefulShutdown()*/\nprocess.once(\'SIGUSR2\', function () {\n  gracefulShutdown(\'nodemon\', function () {\n    process.kill(process.pid, \'SIGUSR2\');\n  });\n});\nprocess.on(\'SIGINT\', function () {\n  gracefulShutdown(\'app termination\', function () {\n    process.exit(0);\n  });\n});\nprocess.on(\'SIGTERM\', function () { // TODO necessary?\n  gracefulShutdown(\'Heroku app shutdown\', function () {\n    process.exit(0);\n  });\n});\n\nrequire(\'./" + lowerCasePlural + "\');"},
-// { file: 'api/models/' + lowerCasePlural + '.js',
-//   content: "const mongoose = require(\'mongoose\');\n\nconst " + lowerCaseSingular + "Schema = new mongoose.Schema({\n  title: { type: String, required: true },\n  year: { type:Number, required: true },\n  director: { type:String, required: true }\n});\n\nmongoose.model(\'" + titleCaseSingular + "\', " + lowerCaseSingular + "Schema); // the first param determines the collection name"},
 { file: 'api/controllers/' + lowerCasePlural + '.js',
 	content: "const mongoose = require(\'mongoose\');\nmongoose.set(\'returnOriginal\', false);\nconst " + titleCaseSingular + " = mongoose.model(\'" + titleCaseSingular + "\');\n\nconst sendJSONresponse = function(res, status, content) {\n  res.status(status);\n  res.json(content);\n};\n\n/* GET /api/" + lowerCasePlural + "/ */\nmodule.exports." + lowerCasePlural + "List = async (req, res) => {\n\ttry {\n\t\tconst " + lowerCasePlural + " = await " + titleCaseSingular + ".find({}); // find all documents\n\t\tconsole.log(" + lowerCasePlural + ");\n\t\tsendJSONresponse(res, 200, " + lowerCasePlural + ");\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 400, err);\n\t}\n};\n\n/* POST /api/" + lowerCasePlural + "/ (Create) */\nmodule.exports." + lowerCasePlural + "Create = async (req, res) => {\t\n\tconst " + lowerCaseSingular + " = new " + titleCaseSingular + "(req.body);\n\ttry {\n\t\tawait " + lowerCaseSingular + ".save();\n\t\tsendJSONresponse(res, 201, " + lowerCaseSingular + ");\n\t} catch (err) {\n\t\tconsole.log(err.message)\n\t\tsendJSONresponse(res, 500, err);\n\t}\n};\n\n/* GET /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Read) */\nmodule.exports." + lowerCasePlural + "ReadOne = async (req, res) => {\n\ttry {\n\t\tconst " + lowerCaseSingular + " = await " + titleCaseSingular + ".findById(req.params." + lowerCaseSingular + "id);\n\t\tif (!" + lowerCaseSingular + ") {\n\t\t\tsendJSONresponse(res, 404);\n\t\t\treturn;\n\t\t}\n\t\tconsole.log(" + lowerCaseSingular + ");\n\t\tsendJSONresponse(res, 200, " + lowerCaseSingular + ");\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n\t}\n};\n\n/* PUT /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Update) */\nmodule.exports." + lowerCasePlural + "UpdateOne = async(req, res) => {\n\tconst " + lowerCaseSingular + "id = req.params." + lowerCaseSingular + "id;\n\tconsole.log(\'" + lowerCaseSingular + "id: \', " + lowerCaseSingular + "id)\n\ttry {\n\t\tawait " + titleCaseSingular + ".findByIdAndUpdate(" + lowerCaseSingular + "id, req.body);\n\t\tsendJSONresponse(res, 200, req.query);\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n\t}\n}\n\n/* DELETE /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Delete) */\nmodule.exports." + lowerCasePlural + "DeleteOne = async (req, res) => {\n  try {\n\t\tconst " + lowerCaseSingular + "id = req.params." + lowerCaseSingular + "id;\n    const " + lowerCaseSingular + " = await " + titleCaseSingular + ".findByIdAndDelete(" + lowerCaseSingular + "id);\n    if (!" + lowerCaseSingular + ") {\n\t\t\tsendJSONresponse(res, 404);\n\t\t\treturn;\n\t\t}\n\t\tconsole.log(\"" + lowerCaseSingular + " id \" + " + lowerCaseSingular + "id + \" deleted\");\n    sendJSONresponse(res, 204, null);\n  } catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n  }\n};"},
 finalModel
 ]
 
-/* Makes the project files */
-// async function asyncLog(files) {
-// 	return new Promise((res, rej) => {
-		
-// 	})
-// }
+// ;(async function dirMaker(dirs) {
+// 	how_many_dirs = dirs.length
+// 	for (let x = 0; x < how_many_dirs; x++) {
+// 		try {
+// 			if (!fs.existsSync(`${dirs[x]}/`)) {
+// 				await fs.mkdirSync(`${dirs[x]}/`)
+// 				console.log(`AA: created ${dirs[x]}/`)
+// 			} else {
+// 				console.log(`AA: skipping ${dirs[x]}/`)
+// 			}
+// 		} catch (err) {
+// 			console.error('AA: Problem creating directories.')
+// 			throw err
+// 		}
+// 	}
+// 	console.log('AA: Directories Created!')
+// })(dirs)
 
-;(async function fileMaker(files) {
+// ;(async function fileMaker(files) {
+// 	how_many_files = files.length
+// 	for (let x = 0; x < how_many_files; x++) {
+// 		try {
+// 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
+// 			console.log(`AA: wrote ${files[x].file}`)
+// 		} catch (err) {
+// 			console.log(`AA: error writing ${files[x].file}`)
+// 		}
+// 	}
+// 	console.log('AA: Files Created!')
+// })(files)
+
+async function dirMaker() {
+	how_many_dirs = dirs.length
+	for (let x = 0; x < how_many_dirs; x++) {
+		try {
+			if (!fs.existsSync(`${dirs[x]}/`)) {
+				await fs.mkdirSync(`${dirs[x]}/`)
+				console.log(`AA: created ${dirs[x]}/`)
+			} else {
+				console.log(`AA: skipping ${dirs[x]}/`)
+			}
+		} catch (err) {
+			console.error('AA: Problem creating directories.')
+			throw err
+		}
+	}
+	console.log('AA: Directories Created!')
+}
+
+async function fileMaker() {
 	how_many_files = files.length
 	for (let x = 0; x < how_many_files; x++) {
 		try {
 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
 			console.log(`AA: wrote ${files[x].file}`)
 		} catch (err) {
-			console.log(`AA: wrote ${files[x].file}`)
+			console.log(`AA: error writing ${files[x].file}`)
 		}
 	}
 	console.log('AA: Files Created!')
-		// try {
-		// 	await fs.writeFile(
-		// 		`${files[x].file}`, 
-		// 		`${files[x].content}`, 
-		// 		function(err) {
-		// 			if (err) {
-		// 				console.log(`AA: error writing ${files[x].file}`)
-		// 				return console.log(err)
-		// 			} else {
-		// 				console.log(`AA: wrote ${files[x].file}`)
-		// 			}
-		// 	})
-		// } catch (err) {
-		// 	console.error('Problem writing files.')
-		// 	throw err
-		// }
-	// }
-})(files)
+}
+
+async function appBuilder() {
+	dirMaker()
+	fileMaker()
+}
+
+appBuilder()
 
 /* Copies the assets/ to their final destination */
 ;(function copyAssets() {
