@@ -72,12 +72,10 @@ packModel = async () => {
 		const reTab = /\t/g
 		const reQuote = /'/g
 		
-		const packedModel = 
-		'"' + model
+		const packedModel = model
 		.replace(reNewLine, '\n')
 		.replace(reTab, '\t')
 		.replace(reQuote, "\'")
-		+ '"'
 		
 		// console.log(packedModel)
 		
