@@ -271,9 +271,9 @@ appBuilder()
 
 /* Installs the project dependencies */
 function promiseFromChildProcess(child) {
-	return new Promise(function (res, rej) {
-			child.on("error", rej)
-			child.on("exit", res)
+	return new Promise(function (resolve, reject) {
+		child.addListener("error", reject)
+		child.addListener("exit", resolve)
 	})
 }
 
