@@ -259,20 +259,6 @@ finalModel
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		src.pipe(dest)
 	}
-	
-  // /* favicon.ico */
-  // const source_favicon = fs.createReadStream(asset_dir + 'favicon.ico')
-  // const favicon = fs.createWriteStream('./public/favicon.ico')
-  // source_favicon.pipe(favicon)
-
-	// /* logos */
-  // const source_logo192 = fs.createReadStream(asset_dir + 'logo192.png')
-  // const logo192 = fs.createWriteStream('./public/logo192.png')
-	// source_logo192.pipe(logo192)
-	
-  // const source_logo512 = fs.createReadStream(asset_dir + 'logo512.png')
-  // const logo512 = fs.createWriteStream('./public/logo512.png')
-	// source_logo512.pipe(logo512)
 })()
 
 /* Installs the project dependencies */
