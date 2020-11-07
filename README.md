@@ -60,3 +60,10 @@ Make sure Mongo is running locally, then...
 `$ npm start` (production)
 
 ***All done! Your app is live on [localhost:3000](localhost:3000)***
+
+---
+
+## REST API
+
+The generated app is backed by a REST API, served by default at [localhost:9000](http://localhost:9000).
+

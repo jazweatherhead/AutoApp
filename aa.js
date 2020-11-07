@@ -250,7 +250,7 @@ async function appBuilder() {
 appBuilder()
 
 /* Copies the assets/ to their final destination */
-;(function copyAssets() {
+;(async function copyAssets() {
 	const assets = [
 		{ name: 'favicon.ico', 
 			dest: './public/' },
