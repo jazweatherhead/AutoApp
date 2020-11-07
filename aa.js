@@ -74,9 +74,9 @@ packModel = async () => {
 		
 		const packedModel = 
 		'"' + model
-		.replace(reNewLine, '\\n')
-		.replace(reTab, '\\t')
-		.replace(reQuote, "\\'")
+		.replace(reNewLine, '\n')
+		.replace(reTab, '\t')
+		.replace(reQuote, "\'")
 		+ '"'
 		
 		// console.log(packedModel)
