@@ -59,13 +59,20 @@ Make sure Mongo is running locally, then...
 
 `$ npm start` (production)
 
-***All done! Your app is live on [localhost:3000](localhost:3000)***
+**Your app is live on [localhost:3000](localhost:3000)**
 
 ---
 
 ## REST API
 
-The generated app is backed by a REST API, served by default at [localhost:9000](http://localhost:9000).
+The app is backed by a REST API, served by default at [localhost:9000](http://localhost:9000).
 
-- GET to /noun gets all db entries
-- GET to /noun/id gets details of db entry with that id
+- `GET /noun` gets all db records
+- `GET /noun/id` gets details of db record with that id
+- `POST /noun` creates a new record
+- `PUT /noun/id` updates the record with that id
+- `DELETE /noun/id` deletes that record
+
+*(noun is config.dbNounSingular)*
+
+***Have fun!***
