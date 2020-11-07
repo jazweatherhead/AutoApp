@@ -250,8 +250,8 @@ finalModel
 			console.error('Problem writing files.')
 			throw err
 		}
-		console.log('AA: Files Created!')
 	}
+	console.log('AA: Files Created!')
 })(files)
 
 /* Copies the assets/ to their final destination */
