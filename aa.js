@@ -262,9 +262,8 @@ appBuilder()
 	for (const asset of assets) {
 		const src = fs.createReadStream(asset_dir + asset.name)
 		const dest = fs.createWriteStream(asset.dest + asset.name)
-		await src.pipe(dest)
+		src.pipe(dest)
 	}
-	console.log('AA: Assets Copied!')
 })()
 
 /* Installs the project dependencies */
