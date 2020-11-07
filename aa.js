@@ -3,7 +3,7 @@ const chalk = require('chalk')
 
 /* Edit the config object with your project details */
 const config = {
-	name: 'Movie DB',
+	name: 'Movie-DB', // No-Spaces
 	yarn: false,
 	dbNounSingular: 'movie', // thing you're storing in db
 	dbNounPlural: 'movies',
