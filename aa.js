@@ -62,6 +62,8 @@ mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first 
 	return model
 }
 
+let finalModel
+
 packModel = async () => {
 	try {
 		const model = makeModel()
@@ -84,14 +86,14 @@ packModel = async () => {
 			content: packedModel
 		}
 		
-		return objModel
+		finalModel = objModel
 		
 	} catch (err) {
 		console.error('Problem packing model!')
 		throw err
 	}
 }
-const model = packModel()
+packModel()
 
 /* Directories to be built. */
 const dirs = [
@@ -222,7 +224,7 @@ files = [
 //   content: "const mongoose = require(\'mongoose\');\n\nconst " + lowerCaseSingular + "Schema = new mongoose.Schema({\n  title: { type: String, required: true },\n  year: { type:Number, required: true },\n  director: { type:String, required: true }\n});\n\nmongoose.model(\'" + titleCaseSingular + "\', " + lowerCaseSingular + "Schema); // the first param determines the collection name"},
 { file: 'api/controllers/' + lowerCasePlural + '.js',
 	content: "const mongoose = require(\'mongoose\');\nmongoose.set(\'returnOriginal\', false);\nconst " + titleCaseSingular + " = mongoose.model(\'" + titleCaseSingular + "\');\n\nconst sendJSONresponse = function(res, status, content) {\n  res.status(status);\n  res.json(content);\n};\n\n/* GET /api/" + lowerCasePlural + "/ */\nmodule.exports." + lowerCasePlural + "List = async (req, res) => {\n\ttry {\n\t\tconst " + lowerCasePlural + " = await " + titleCaseSingular + ".find({}); // find all documents\n\t\tconsole.log(" + lowerCasePlural + ");\n\t\tsendJSONresponse(res, 200, " + lowerCasePlural + ");\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 400, err);\n\t}\n};\n\n/* POST /api/" + lowerCasePlural + "/ (Create) */\nmodule.exports." + lowerCasePlural + "Create = async (req, res) => {\t\n\tconst " + lowerCaseSingular + " = new " + titleCaseSingular + "(req.body);\n\ttry {\n\t\tawait " + lowerCaseSingular + ".save();\n\t\tsendJSONresponse(res, 201, " + lowerCaseSingular + ");\n\t} catch (err) {\n\t\tconsole.log(err.message)\n\t\tsendJSONresponse(res, 500, err);\n\t}\n};\n\n/* GET /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Read) */\nmodule.exports." + lowerCasePlural + "ReadOne = async (req, res) => {\n\ttry {\n\t\tconst " + lowerCaseSingular + " = await " + titleCaseSingular + ".findById(req.params." + lowerCaseSingular + "id);\n\t\tif (!" + lowerCaseSingular + ") {\n\t\t\tsendJSONresponse(res, 404);\n\t\t\treturn;\n\t\t}\n\t\tconsole.log(" + lowerCaseSingular + ");\n\t\tsendJSONresponse(res, 200, " + lowerCaseSingular + ");\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n\t}\n};\n\n/* PUT /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Update) */\nmodule.exports." + lowerCasePlural + "UpdateOne = async(req, res) => {\n\tconst " + lowerCaseSingular + "id = req.params." + lowerCaseSingular + "id;\n\tconsole.log(\'" + lowerCaseSingular + "id: \', " + lowerCaseSingular + "id)\n\ttry {\n\t\tawait " + titleCaseSingular + ".findByIdAndUpdate(" + lowerCaseSingular + "id, req.body);\n\t\tsendJSONresponse(res, 200, req.query);\n\t} catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n\t}\n}\n\n/* DELETE /api/" + lowerCasePlural + "/:" + lowerCaseSingular + "id (Delete) */\nmodule.exports." + lowerCasePlural + "DeleteOne = async (req, res) => {\n  try {\n\t\tconst " + lowerCaseSingular + "id = req.params." + lowerCaseSingular + "id;\n    const " + lowerCaseSingular + " = await " + titleCaseSingular + ".findByIdAndDelete(" + lowerCaseSingular + "id);\n    if (!" + lowerCaseSingular + ") {\n\t\t\tsendJSONresponse(res, 404);\n\t\t\treturn;\n\t\t}\n\t\tconsole.log(\"" + lowerCaseSingular + " id \" + " + lowerCaseSingular + "id + \" deleted\");\n    sendJSONresponse(res, 204, null);\n  } catch (err) {\n\t\tconsole.log(err.message);\n\t\tsendJSONresponse(res, 500, err);\n  }\n};"},
-model
+finalModel
 ]
 
 /* Makes the project files */
