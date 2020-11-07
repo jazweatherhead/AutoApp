@@ -242,7 +242,7 @@ async function fileMaker() {
 }
 
 /* Copies the assets/ to their final destination */
-async function copyAssets() {
+function copyAssets() {
 	const assets = [
 		{ name: 'favicon.ico', 
 			dest: './public/' },
@@ -253,8 +253,8 @@ async function copyAssets() {
 	]
 	
 	for (const asset of assets) {
-		const src = await fs.createReadStream(asset_dir + asset.name)
-		const dest = await fs.createWriteStream(asset.dest + asset.name)
+		const src = fs.createReadStream(asset_dir + asset.name)
+		const dest = fs.createWriteStream(asset.dest + asset.name)
 		src.pipe(dest)
 	}
 }
