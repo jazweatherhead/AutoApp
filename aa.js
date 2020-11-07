@@ -231,27 +231,40 @@ finalModel
 ]
 
 /* Makes the project files */
+// async function asyncLog(files) {
+// 	return new Promise((res, rej) => {
+		
+// 	})
+// }
+
 ;(async function fileMaker(files) {
 	how_many_files = files.length
 	for (let x = 0; x < how_many_files; x++) {
 		try {
-			await fs.writeFile(
-				`${files[x].file}`, 
-				`${files[x].content}`, 
-				function(err) {
-					if (err) {
-						console.log(`AA: error writing ${files[x].file}`)
-						return console.log(err)
-					} else {
-						console.log(`AA: wrote ${files[x].file}`)
-					}
-			})
+			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
+			console.log(`AA: wrote ${files[x].file}`)
 		} catch (err) {
-			console.error('Problem writing files.')
-			throw err
+			console.log(`AA: wrote ${files[x].file}`)
 		}
 	}
 	console.log('AA: Files Created!')
+		// try {
+		// 	await fs.writeFile(
+		// 		`${files[x].file}`, 
+		// 		`${files[x].content}`, 
+		// 		function(err) {
+		// 			if (err) {
+		// 				console.log(`AA: error writing ${files[x].file}`)
+		// 				return console.log(err)
+		// 			} else {
+		// 				console.log(`AA: wrote ${files[x].file}`)
+		// 			}
+		// 	})
+		// } catch (err) {
+		// 	console.error('Problem writing files.')
+		// 	throw err
+		// }
+	// }
 })(files)
 
 /* Copies the assets/ to their final destination */
@@ -275,9 +288,9 @@ finalModel
 
 /* Installs the project dependencies */
 function promiseFromChildProcess(child) {
-	return new Promise(function (resolve, reject) {
-			child.addListener("error", reject)
-			child.addListener("exit", resolve)
+	return new Promise(function (res, rej) {
+			child.on("error", rej)
+			child.on("exit", res)
 	})
 }
 
