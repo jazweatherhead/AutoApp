@@ -40,9 +40,9 @@ const spinner = new Spinner('processing.. %s')
 spinner.setSpinnerString('|/-\\')
 spinner.start()
 
-/* For the copyright notice */
-const now = new Date()
-const year = now.getFullYear()
+// /* For the copyright notice */
+// const now = new Date()
+// const year = now.getFullYear()
 
 /* Build model */
 makeModel = () => {
@@ -244,9 +244,8 @@ async function fileMaker() {
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	console.log('AA: App structure created!')
+	console.log('AA: App Structure Created!')
 }
-
 appBuilder()
 
 /* Copies the assets/ to their final destination */
@@ -280,14 +279,14 @@ const exec = require('child_process').exec
 
 ;(async (spinner) => {
 	const serverDeps = exec(`${packMan} install`,
-	    function (err, stdout, stderr) {
-	      console.log(`${stdout}`)
-	      console.log(`${stderr}`)
-	      if (err !== null) {
-	        console.log('exec error: ${err}')
-	      }
-	    }
-	  )
+		function (err, stdout, stderr) {
+			console.log(`${stdout}`)
+			console.log(`${stderr}`)
+			if (err !== null) {
+				console.log('exec error: ${err}')
+			}
+		}
+	)
 	const clientDeps = exec(`cd frontend; ${packMan} install`,
 		function (err, stdout, stderr) {
 			console.log(`${stdout}`)
