@@ -210,37 +210,6 @@ files = [
 finalModel
 ]
 
-// ;(async function dirMaker(dirs) {
-// 	how_many_dirs = dirs.length
-// 	for (let x = 0; x < how_many_dirs; x++) {
-// 		try {
-// 			if (!fs.existsSync(`${dirs[x]}/`)) {
-// 				await fs.mkdirSync(`${dirs[x]}/`)
-// 				console.log(`AA: created ${dirs[x]}/`)
-// 			} else {
-// 				console.log(`AA: skipping ${dirs[x]}/`)
-// 			}
-// 		} catch (err) {
-// 			console.error('AA: Problem creating directories.')
-// 			throw err
-// 		}
-// 	}
-// 	console.log('AA: Directories Created!')
-// })(dirs)
-
-// ;(async function fileMaker(files) {
-// 	how_many_files = files.length
-// 	for (let x = 0; x < how_many_files; x++) {
-// 		try {
-// 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
-// 			console.log(`AA: wrote ${files[x].file}`)
-// 		} catch (err) {
-// 			console.log(`AA: error writing ${files[x].file}`)
-// 		}
-// 	}
-// 	console.log('AA: Files Created!')
-// })(files)
-
 async function dirMaker() {
 	how_many_dirs = dirs.length
 	for (let x = 0; x < how_many_dirs; x++) {
@@ -273,8 +242,9 @@ async function fileMaker() {
 }
 
 async function appBuilder() {
-	dirMaker()
-	fileMaker()
+	await dirMaker()
+	await fileMaker()
+	console.log('AA: App structure created!')
 }
 
 appBuilder()
