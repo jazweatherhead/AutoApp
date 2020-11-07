@@ -67,3 +67,5 @@ Make sure Mongo is running locally, then...
 
 The generated app is backed by a REST API, served by default at [localhost:9000](http://localhost:9000).
 
+- GET to /noun gets all db entries
+- GET to /noun/id gets details of db entry with that id
