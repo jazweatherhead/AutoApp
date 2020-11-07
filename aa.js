@@ -241,15 +241,8 @@ async function fileMaker() {
 	console.log('AA: Files Created!')
 }
 
-async function appBuilder() {
-	await dirMaker()
-	await fileMaker()
-	console.log('AA: App Structure Created!')
-}
-appBuilder()
-
 /* Copies the assets/ to their final destination */
-;(async function copyAssets() {
+async function copyAssets() {
 	const assets = [
 		{ name: 'favicon.ico', 
 			dest: './public/' },
@@ -264,7 +257,15 @@ appBuilder()
 		const dest = fs.createWriteStream(asset.dest + asset.name)
 		src.pipe(dest)
 	}
-})()
+}
+
+async function appBuilder() {
+	await dirMaker()
+	await fileMaker()
+	console.log('AA: App Structure Created!')
+	copyAssets()
+}
+appBuilder()
 
 /* Installs the project dependencies */
 function promiseFromChildProcess(child) {
