@@ -80,7 +80,7 @@ packModel = async () => {
 		// console.log(packedModel)
 		
 		const objModel = {
-			file: `'api/models/${lowerCasePlural}.js'`,
+			file: `api/models/${lowerCasePlural}.js`,
 			content: packedModel
 		}
 		
