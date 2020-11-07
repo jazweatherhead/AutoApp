@@ -127,9 +127,9 @@ const dirs = [
 	for (let x = 0; x < how_many_dirs; x++) {
 		if (!fs.existsSync(`${dirs[x]}/`)) {
 			fs.mkdirSync(`${dirs[x]}/`)
-			console.log(`AA: built ${dirs[x]}/`);
+			console.log(`AA: built ${dirs[x]}/`)
 		} else {
-			console.log(`AA: skipping ${dirs[x]}/`);
+			console.log(`AA: skipping ${dirs[x]}/`)
 		}
 	}
 })(dirs)
@@ -243,29 +243,44 @@ finalModel
 	}
 })(files)
 
-/* Copies the banner and favicon from assets/ to their final destination */
-;(function copyAssets() { // TODO DRY this out
-  /* favicon.ico */
-  const source_favicon = fs.createReadStream(asset_dir + 'favicon.ico')
-  const favicon = fs.createWriteStream('./public/favicon.ico')
-  source_favicon.pipe(favicon)
-
-	/* logos */
-  const source_logo192 = fs.createReadStream(asset_dir + 'logo192.png')
-  const logo192 = fs.createWriteStream('./public/logo192.png')
-	source_logo192.pipe(logo192)
+/* Copies the assets/ to their final destination */
+;(function copyAssets() {
+	const assets = [
+		{ name: 'favicon.ico', 
+			dest: './public/' },
+		{ name: 'logo192.png', 
+			dest: './public/' },
+		{ name: 'logo512.png', 
+			dest: './public/' },
+	]
 	
-  const source_logo512 = fs.createReadStream(asset_dir + 'logo512.png')
-  const logo512 = fs.createWriteStream('./public/logo512.png')
-	source_logo512.pipe(logo512)
+	for (const asset of assets) {
+		const src = fs.createReadStream(asset_dir + asset.name)
+		const dest = fs.createWriteStream(asset.dest + asset.name)
+		src.pipe(dest)
+	}
+	
+  // /* favicon.ico */
+  // const source_favicon = fs.createReadStream(asset_dir + 'favicon.ico')
+  // const favicon = fs.createWriteStream('./public/favicon.ico')
+  // source_favicon.pipe(favicon)
+
+	// /* logos */
+  // const source_logo192 = fs.createReadStream(asset_dir + 'logo192.png')
+  // const logo192 = fs.createWriteStream('./public/logo192.png')
+	// source_logo192.pipe(logo192)
+	
+  // const source_logo512 = fs.createReadStream(asset_dir + 'logo512.png')
+  // const logo512 = fs.createWriteStream('./public/logo512.png')
+	// source_logo512.pipe(logo512)
 })()
 
 /* Installs the project dependencies */
 function promiseFromChildProcess(child) {
 	return new Promise(function (resolve, reject) {
-			child.addListener("error", reject);
-			child.addListener("exit", resolve);
-	});
+			child.addListener("error", reject)
+			child.addListener("exit", resolve)
+	})
 }
 
 const exec = require('child_process').exec

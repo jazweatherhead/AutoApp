@@ -57,7 +57,6 @@ const TransformStream = new Transform({
 		writeMe.write(`  content: "${newChunk}"},\n`)
 		
 		// console.log('after: ', newChunk)
-		this.push(newChunk) // TODO necessary?
 		callback()
 	}
 })
