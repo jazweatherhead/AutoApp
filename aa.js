@@ -271,24 +271,8 @@ function promiseFromChildProcess(child) {
 const exec = require('child_process').exec
 
 async function installDeps() {
-	const serverDeps = exec(`${packMan} install`,
-		function (err, stdout, stderr) {
-			console.log(`${stdout}`)
-			console.log(`${stderr}`)
-			if (err !== null) {
-				console.log('exec error: ${err}')
-			}
-		}
-	)
-	const clientDeps = exec(`cd frontend; ${packMan} install`,
-		function (err, stdout, stderr) {
-			console.log(`${stdout}`)
-			console.log(`${stderr}`)
-			if (err !== null) {
-				console.log('exec error: ${err}')
-			}
-		}
-	)
+	const serverDeps = exec(`${packMan} install`)
+	const clientDeps = exec(`cd frontend; ${packMan} install`)
 	
 	try {
 		await promiseFromChildProcess(serverDeps)
