@@ -226,7 +226,7 @@ async function dirMaker() {
 			throw err
 		}
 	}
-	console.log('AA: Directories Created!')
+	console.log('AA: Directories Created')
 }
 
 async function fileMaker() {
@@ -239,7 +239,7 @@ async function fileMaker() {
 			console.log(`AA: error writing ${files[x].file}`)
 		}
 	}
-	console.log('AA: Files Created!')
+	console.log('AA: Files Created')
 }
 
 /* Copies the assets/ to their final destination */
@@ -263,7 +263,7 @@ function copyAssets() {
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	console.log('AA: App Structure Created!')
+	console.log('AA: App Structure Created')
 	copyAssets()
 }
 appBuilder()
