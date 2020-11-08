@@ -28,18 +28,21 @@ Clone the repo into your empty project directory. Don't forget the trailing dot!
 ### Configure
 Edit the config object at the top of aa.js.	
 
-| config key     | description                                           |
-|----------------|-------------------------------------------------------|
-| name           | The site/app name.                                    |
-| dbNounSingular | The thing you're using the db to store.               |
-| dbNounPlural   | The plural of the thing you're using the db to store. |
-| dbSchema       | The db field names, types and if they're required.    |
-| yarn           | True installs dependencies with yarn. False uses npm. |
+| config key     | description                                               |
+|----------------|-----------------------------------------------------------|
+| name           | The site/app name.                                        |
+| yarn           | True installs dependencies with yarn. False uses npm.     |
+| dbNounSingular | The thing you're using the db to store.                   |
+| dbNounPlural   | The plural of the thing you're using the db to store.     |
+| dbSchema       | The db field names, types and if they're required.        |
+| title          | Set this to the schema field you wish to use as the title |
 
  Then replace the contents of `assets/` with your 
 	`favicon.ico`
 	`logo192.png`
 	`logo512.png`
+	
+*The config.title field will be used as the records' title, meaning it will appear in the GET performed at `noun/` and in the Create and Delete select boxes. This is only used for the front-end and doesn't affect the API. See the API reference later in this file for the REST endpoint details.*
 	
 ### Create
 

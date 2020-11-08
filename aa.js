@@ -19,7 +19,8 @@ const config = {
 			type: 'Number',
 			required: true
 		}
-	}
+	},
+	title: 'director' // see note in README.md
 }
 
 const asset_dir = __dirname + '/assets/'
@@ -160,7 +161,7 @@ files = [
 { file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.scss',
   content: ".update-" + lowerCaseSingular + " {\n\t\n}\n\n#update-" + lowerCaseSingular + "-form {\n\t\n}"},
 { file: 'frontend/src/components/Read' + titleCasePlural + '/Read' + titleCasePlural + '.jsx',
-  content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport \'./Read" + titleCasePlural + ".scss\'\n\nfunction Read" + titleCasePlural + "() {\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + " () {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\treturn (\n\t\t<div className=\"read-" + lowerCasePlural + "\">\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t<p key={" + lowerCaseSingular + "._id}>\n\t\t\t\t\t<a href={`/${" + lowerCaseSingular + "._id}`}>{" + lowerCaseSingular + ".title}</a>\n\t\t\t\t</p>\n\t\t\t\t))\n\t\t\t}\n\t\t</div>\n\t)\n}\n\nexport default Read" + titleCasePlural + ""},
+  content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport \'./Read" + titleCasePlural + ".scss\'\n\nfunction Read" + titleCasePlural + "() {\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + " () {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\treturn (\n\t\t<div className=\"read-" + lowerCasePlural + "\">\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t<p key={" + lowerCaseSingular + "._id}>\n\t\t\t\t\t<a href={`/${" + lowerCaseSingular + "._id}`}>{" + lowerCaseSingular + "." + config.title + "}</a>\n\t\t\t\t</p>\n\t\t\t\t))\n\t\t\t}\n\t\t</div>\n\t)\n}\n\nexport default Read" + titleCasePlural + ""},
 { file: 'frontend/src/components/Read' + titleCasePlural + '/Read' + titleCasePlural + '.scss',
   content: ".read-" + lowerCasePlural + " {\n\t\n}"},
 { file: 'frontend/src/components/Read' + titleCaseSingular + '/Read' + titleCaseSingular + '.jsx',
