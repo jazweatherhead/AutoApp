@@ -3,9 +3,9 @@ const fs = require('fs-extra')
 /* Edit the config object with your project details */
 const config = {
 	name: 'Movie-DB', // No-Spaces
-	yarn: false,
-	dbNounSingular: 'movie', // thing you're storing in db
-	dbNounPlural: 'movies',
+	yarn: true,
+	dbNounSingular: 'film', // thing you're storing in db
+	dbNounPlural: 'films',
 	dbSchema: { // db fields, field types and if they're required
 		title: {
 			type: 'String',
@@ -20,7 +20,7 @@ const config = {
 			required: true
 		}
 	},
-	title: 'director' // see note in README.md
+	title: 'title' // see note in README.md
 }
 
 const asset_dir = __dirname + '/assets/'
@@ -296,7 +296,7 @@ async function installDeps() {
 		await promiseFromChildProcess(clientDeps)
 		console.log('\nAA: client dependencies installed')
 		spinner.stop()
-		console.log('\n* App Generation Completed Successfully *\n\n\'npm run dev\' to begin.\n')
+		console.log('\n* APP GENERATION COMPELETED SUCCESSFULLY *\n\n\'npm run dev\' to begin.\n')
 	} catch (err) {
 		console.error('Problem installing dependencies!')
 		throw err
