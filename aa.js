@@ -260,14 +260,6 @@ function copyAssets() {
 	}
 }
 
-async function appBuilder() {
-	await dirMaker()
-	await fileMaker()
-	console.log('AA: App Structure Created')
-	copyAssets()
-}
-appBuilder()
-
 /* Installs the project dependencies */
 function promiseFromChildProcess(child) {
 	return new Promise(function (resolve, reject) {
@@ -278,7 +270,8 @@ function promiseFromChildProcess(child) {
 
 const exec = require('child_process').exec
 
-;(async (spinner) => {
+// ;(async (spinner) => {
+async function installDeps() {
 	const serverDeps = exec(`${packMan} install`,
 		function (err, stdout, stderr) {
 			console.log(`${stdout}`)
@@ -309,4 +302,14 @@ const exec = require('child_process').exec
 		console.error('Problem installing dependencies!')
 		throw err
 	}
-})(spinner)
+}
+// })(spinner)
+
+async function appBuilder() {
+	await dirMaker()
+	await fileMaker()
+	console.log('AA: App Structure Created')
+	copyAssets()
+	installDeps()
+}
+appBuilder()
