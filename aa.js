@@ -20,7 +20,7 @@ const config = {
 			required: true
 		}
 	},
-	title: 'title' // see note in README.md
+	title: 'title' // see README
 }
 
 const asset_dir = __dirname + '/assets/'
@@ -122,7 +122,7 @@ const dirs = [
 	'api/routes',
 ]
 
-/* Files to be built - You can add your own entries to customize the generator */
+/* Files to be built */
 files = [
 { file: '.env',
   content: "#Change MONGODB_URI to your production db\nMONGODB_URI = mongodb://localhost/" + upperCasePlural +"_DB\nPORT = 9000"},
@@ -222,11 +222,11 @@ async function dirMaker() {
 				console.log(`AA: skipping ${dirs[x]}/`)
 			}
 		} catch (err) {
-			console.error('AA: Problem creating directories.')
+			console.error('! Problem Creating Directories !')
 			throw err
 		}
 	}
-	console.log('AA: * Directories Created *')
+	console.log('* Directories Created *')
 }
 
 async function fileMaker() {
@@ -236,10 +236,10 @@ async function fileMaker() {
 			await fs.writeFile(`${files[x].file}`, `${files[x].content}`)
 			console.log(`AA: wrote ${files[x].file}`)
 		} catch (err) {
-			console.log(`AA: error writing ${files[x].file}`)
+			console.log(`! Error Writing ${files[x].file} !`)
 		}
 	}
-	console.log('AA: * Files Created *')
+	console.log('* Files Created *')
 }
 
 /* Copies the assets/ to their final destination */
@@ -276,13 +276,13 @@ async function installDeps() {
 	
 	try {
 		await promiseFromChildProcess(serverDeps)
-		console.log('\nAA: server dependencies installed')
+		console.log('\n* Server Dependencies Installed *')
 		await promiseFromChildProcess(clientDeps)
-		console.log('\nAA: client dependencies installed')
+		console.log('\n* Client Dependencies Installed *')
 		spinner.stop()
-		console.log('\n* APP GENERATION COMPELETED SUCCESSFULLY *\n\n\'npm run dev\' to begin.\n')
+		console.log('\n*** App Generated ***\n\n\'npm run dev\' to begin.\n')
 	} catch (err) {
-		console.error('Problem installing dependencies!')
+		console.error('! Problem Installing Dependencies !')
 		throw err
 	}
 }
@@ -290,7 +290,7 @@ async function installDeps() {
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	console.log('AA: * App Structure Created *')
+	console.log('* App Structure Created *')
 	copyAssets()
 	installDeps()
 }
