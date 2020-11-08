@@ -226,7 +226,7 @@ async function dirMaker() {
 			throw err
 		}
 	}
-	console.log('AA: Directories Created')
+	console.log('AA: * Directories Created *')
 }
 
 async function fileMaker() {
@@ -239,7 +239,7 @@ async function fileMaker() {
 			console.log(`AA: error writing ${files[x].file}`)
 		}
 	}
-	console.log('AA: Files Created')
+	console.log('AA: * Files Created *')
 }
 
 /* Copies the assets/ to their final destination */
@@ -270,7 +270,6 @@ function promiseFromChildProcess(child) {
 
 const exec = require('child_process').exec
 
-// ;(async (spinner) => {
 async function installDeps() {
 	const serverDeps = exec(`${packMan} install`,
 		function (err, stdout, stderr) {
@@ -297,18 +296,17 @@ async function installDeps() {
 		await promiseFromChildProcess(clientDeps)
 		console.log('\nAA: client dependencies installed')
 		spinner.stop()
-		console.log('\nApp generation completed successfully.\n\n\'npm run dev\' to begin.')
+		console.log('\n* App Generation Completed Successfully *\n\n\'npm run dev\' to begin.')
 	} catch (err) {
 		console.error('Problem installing dependencies!')
 		throw err
 	}
 }
-// })(spinner)
 
 async function appBuilder() {
 	await dirMaker()
 	await fileMaker()
-	console.log('AA: App Structure Created')
+	console.log('AA: * App Structure Created *')
 	copyAssets()
 	installDeps()
 }
