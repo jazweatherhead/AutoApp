@@ -221,6 +221,7 @@ export default ReadMovie
 			}
 			
 			finalRead = objRead
+			console.log(finalRead)
 			
 		} catch (err) {
 			console.error('! Problem Packing ReadNoun !')
