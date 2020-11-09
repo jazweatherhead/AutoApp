@@ -137,7 +137,7 @@ import Update${titleCaseSingular} from '../Update${titleCaseSingular}/Update${ti
 
 import './Read${titleCaseSingular}.scss'
 
-function ReadMovie() {
+function Read${titleCaseSingular}() {
 	const [${lowerCaseSingular}, set${titleCaseSingular}] = useState(
 		{
 ${model1}
