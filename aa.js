@@ -93,7 +93,7 @@ function buildModel() {
 		}
 	}
 }
-// packModel()
+buildModel()
 
 /* Directories to be built. */
 const dirs = [
@@ -289,7 +289,6 @@ async function installDeps() {
 }
 
 async function appBuilder() {
-	buildModel()
 	await dirMaker()
 	await fileMaker()
 	copyAssets()
