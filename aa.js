@@ -237,13 +237,13 @@ function buildUpdateNoun() {
 	makeUpdate = () => {
 		let model1 = ''
 		for (const key in config.dbSchema) {
-			model1 += `\t\t\t\t${key}: ${lowerCaseSingular}.${key},\n`
+			model1 += `\t\t\t\t${key}: props.${lowerCaseSingular}.${key},\n`
 		}
 		
 		let model2 = ''
 		for (const key in config.dbSchema) {
 			model2 += `\t\t\t\t\t<label htmlFor="${key}">${key[0].toUpperCase() + key.slice(1)}:</label><br />\n`
-			model2 += `\t\t\t\t\t<input type="text" name="${key}" id="${key}" value={${lowerCaseSingular}.${key}} onChange={handleInputChange} /><br />\n`
+			model2 += `\t\t\t\t\t<input type="text" name="${key}" id="${key}" value={props.${lowerCaseSingular}.${key}} onChange={handleInputChange} /><br />\n`
 		}
 		
 	
@@ -253,10 +253,9 @@ import axios from 'axios'
 const Update${titleCaseSingular} = (props) => {
 	const [msg, setMsg] = useState('')
 	const [msgColor, setMsgColor] = useState('#0f0')
-	const { handleInputChange, ${lowerCaseSingular}, ${lowerCaseSingular}id } = props
 	
 	function update${titleCaseSingular}(${lowerCaseSingular}id) {
-		axios.put(\`api/${lowerCaseSingular}/$\{${lowerCaseSingular}id\}\`,
+		axios.put(\`api/${lowerCasePlural}/$\{${lowerCaseSingular}id\}\`,
 			{
 ${model1}
 			}
@@ -264,7 +263,7 @@ ${model1}
 		.then(res => {
 			console.log('${lowerCaseSingular} updated')
 			// show message
-			setMsg('Movie updated!')
+			setMsg('${titleCaseSingular} updated!')
 			setMsgColor('#0ff')
 		})
 		.catch(err => {
@@ -278,7 +277,7 @@ ${model1}
 	function handleSubmit(e) {
 		e.preventDefault()
 		// update ${lowerCaseSingular}
-		update${titleCaseSingular}(${lowerCaseSingular}id)
+		update${titleCaseSingular}(props.${lowerCaseSingular}id)
 		// clear form
 		document.getElementById('update-${lowerCaseSingular}-form').reset()
 	}
