@@ -133,25 +133,25 @@ function buildReadNoun() {
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
-import UpdateMovie from '../UpdateMovie/UpdateMovie'
+import Update${titleCaseSingular} from '../Update${titleCaseSingular}/Update${titleCaseSingular}'
 
-import './ReadMovie.scss'
+import './Read${titleCaseSingular}.scss'
 
 function ReadMovie() {
-	const [movie, setMovie] = useState(
+	const [${lowerCaseSingular}, set${titleCaseSingular}] = useState(
 		{
 ${model1}
 		}
 	)
 	const [isUpdateHidden, setIsUpdateHidden] = useState(true)	
 	
-	let { movieid } = useParams()
+	let { ${lowerCaseSingular}id } = useParams()
 	
 	// get movie details
 	useEffect(() => {
-		axios.get(\`/api/movies/$\{movieid\}\`)
+		axios.get(\`/api/${lowerCasePlural}/$\{${lowerCaseSingular}id\}\`)
 			.then(res => {
-				setMovie(res.data)
+				set${titleCaseSingular}(res.data)
 				console.log(res.data)
 			})
 			.catch(err => console.error(err))
@@ -171,29 +171,29 @@ ${model2}
 				break
 		}
 
-		setMovie(editBlock)
+		set${titleCaseSingular}(editBlock)
 	}
 	
 	return (
 		<div>
-			<div className="read-movie">
+			<div className="read-${lowerCaseSingular}">
 ${model3}
 				<br />
 				<form>
-					<input type="submit" value={isUpdateHidden ? "Edit Movie": "Nevermind"} onClick={handleEditButton}/>
+					<input type="submit" value={isUpdateHidden ? "Edit ${titleCaseSingular}": "Nevermind"} onClick={handleEditButton}/>
 				</form>
 			</div>
 			{!isUpdateHidden && (
 				<UpdateMovie
-					movie={movie}
-					movieid={movieid}
+					movie={${lowerCaseSingular}}
+					movieid={${lowerCaseSingular}id}
 					handleInputChange={handleInputChange} /> 
 			)}
 		</div>
 	)
 }
 
-export default ReadMovie
+export default Read${titleCaseSingular}
 	`
 		// console.log(`\n${read}`)
 		return read
