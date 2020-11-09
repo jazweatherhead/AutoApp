@@ -356,7 +356,7 @@ function buildCreateNoun() {
 		for (const key in config.dbSchema) {
 			const req = config.dbSchema[key].required ? 'required' : ''
 			model4 += `\t\t\t<label htmlFor="${key}">${key[0].toUpperCase() + key.slice(1)}:</label><br />\n`
-			model4 += `\t\t\t<input type="text" name="${key}" onChange={${key[0].toUpperCase() + key.slice(1)}} ${req} } />\n`
+			model4 += `\t\t\t<input type="text" name="${key}" onChange={set${key[0].toUpperCase() + key.slice(1)}} ${req} />\n`
 			model4 += `\t\t\t<br />\n`
 		}
 	
