@@ -3,9 +3,9 @@ const fs = require('fs-extra')
 /* Edit the config object with your project details */
 const config = {
 	name: 'Movie-DB', // No-Spaces
-	yarn: true,
-	dbNounSingular: 'film', // thing you're storing in db
-	dbNounPlural: 'films',
+	yarn: false,
+	dbNounSingular: 'movie', // thing you're storing in db
+	dbNounPlural: 'movies',
 	dbSchema: { // db fields, field types and if they're required
 		title: {
 			type: 'String',

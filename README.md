@@ -42,7 +42,7 @@ Edit the config object at the top of aa.js.
 	`logo192.png`
 	`logo512.png`
 	
-*The config.title field will be used as the records' title, meaning it will appear in the GET performed at `noun/` and in the Create and Delete select boxes. This is only used for the front-end and doesn't affect the API. See the API reference later in this file for the REST endpoint details.*
+*The config.title field will be used as the records' title, meaning it will appear in the GET performed at `noun/` and in the Create and Delete select boxes. This is only used for the front-end and doesn't affect the API.*
 	
 ### Create
 
