@@ -129,7 +129,7 @@ function buildReadNoun() {
 			}
 		}
 		
-		const read = `import React, { useState, useEffect } from 'react'
+		const read = `NEWSHITimport React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
