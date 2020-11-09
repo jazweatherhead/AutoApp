@@ -56,7 +56,7 @@ function buildModel() {
 	
 		const model = `const mongoose = require('mongoose')
 	
-	const ${lowerCaseSingular}Schema = new mongoose.Schema({
+		const ${lowerCaseSingular}Schema = new mongoose.Schema({
 	${schema}
 	})
 	mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first param determines the collection name
@@ -185,8 +185,8 @@ ${model3}
 			</div>
 			{!isUpdateHidden && (
 				<Update${titleCaseSingular}
-					movie={${lowerCaseSingular}}
-					movieid={${lowerCaseSingular}id}
+					${lowerCaseSingular}={${lowerCaseSingular}}
+					${lowerCaseSingular}id={${lowerCaseSingular}id}
 					handleInputChange={handleInputChange} /> 
 			)}
 		</div>
@@ -231,6 +231,109 @@ export default Read${titleCaseSingular}
 	packRead()
 }
 buildReadNoun()
+
+let finalUpdate
+function buildUpdateNoun() {
+	makeUpdate = () => {
+		let model1 = ''
+		for (const key in config.dbSchema) {
+			model1 += `\t\t\t\t${key}: ${lowerCaseSingular}.${key},\n`
+		}
+		
+		let model2 = ''
+		for (const key in config.dbSchema) {
+			model2 += `\t\t\t\t\t<label htmlFor="${key}">${key[0].toUpperCase() + key.slice(1)}:</label><br />\n`
+			model2 += `\t\t\t\t\t<input type="text" name="${key}" id="${key}" value={${lowerCaseSingular}.${key}} onChange={handleInputChange} /><br />\n`
+		}
+		
+	
+		const update = `import React, { useState } from 'react'
+import axios from 'axios'
+
+const Update${titleCaseSingular} = (props) => {
+	const [msg, setMsg] = useState('')
+	const [msgColor, setMsgColor] = useState('#0f0')
+	const { handleInputChange, ${lowerCaseSingular}, ${lowerCaseSingular}id}
+	
+	function update${titleCaseSingular}(${lowerCaseSingular}id) {
+		axios.put(\`api/movies/${movieid}\`,
+			{
+${model1}
+			}
+		)
+		.then(res => {
+			console.log('${lowerCaseSingular} updated')
+			// show message
+			setMsg('Movie updated!')
+			setMsgColor('#0ff')
+		})
+		.catch(err => {
+			console.error(err)
+			// show message
+			setMsg('Problem updating ${lowerCaseSingular}!')
+			setMsgColor('#f00')
+		})
+	}
+	
+	function handleSubmit(e) {
+		e.preventDefault()
+		// update ${lowerCaseSingular}
+		update${titleCaseSingular}(${lowerCaseSingular}id)
+		// clear form
+		document.getElementById('update-${lowerCaseSingular}-form').reset()
+	}
+	
+	return(
+		<div>
+			<div className="update-${lowerCaseSingular}"><br />
+				<h3>Update ${titleCaseSingular}</h3>
+				<p id="msg" style={{fontWeight: 'bold', color: msgColor}}>{msg}</p>
+				<form onSubmit={handleSubmit} id="update-${lowerCaseSingular}-form">
+${model2}
+					<input type="submit" value="Update ${titleCaseSingular}"/>
+				</form>
+			</div>
+		</div>
+	)
+}
+
+export default Update${titleCaseSingular}`
+		// console.log(`\n${update}`)
+		return update
+	}
+	makeUpdate()
+	
+	packUpdate = async () => {
+		try {
+			const read = makeUpdate()
+	
+			const reNewLine = /\n/g
+			const reTab = /\t/g
+			const reQuote = /'/g
+			
+			const packedUpdate = read
+			.replace(reNewLine, '\n')
+			.replace(reTab, '\t')
+			.replace(reQuote, "\'")
+			
+			// console.log(packedUpdate)
+			
+			const objUpdate = {
+				file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.jsx',
+				content: packedUpdate
+			}
+			
+			finalUpdate = objUpdate
+			// console.log(finalUpdate)
+			
+		} catch (err) {
+			console.error('! Problem Packing UpdateNoun !')
+			throw err
+		}
+	}
+	packUpdate()
+}
+buildUpdateNoun()
 
 // function buildCreateNoun() {
 	
@@ -297,9 +400,12 @@ files = [
 { file: 'frontend/src/hooks/useInput.js',
   content: "import { useState } from \'react\'\n\nfunction useInput(initialValue) {\n\tconst [value, setValue] = useState(initialValue)\n\t\n\tfunction handleChange(e) {\n\t\tsetValue(e.target.value)\n\t}\n\t\n\treturn [value, handleChange]\n}\n\nexport default useInput"},
 { file: 'frontend/src/hooks/useSelect.js',
-  content: "import { useState } from \'react\'\n\nfunction useSelect(initialValue) {\n\tconst [value, setValue] = useState(initialValue)\n\t\n\tfunction handleChange(e) {\n\t\tsetValue(e.target.value)\n\t}\n\t\n\treturn [value, handleChange]\n}\n\nexport default useSelect"},
+	content: "import { useState } from \'react\'\n\nfunction useSelect(initialValue) {\n\tconst [value, setValue] = useState(initialValue)\n\t\n\tfunction handleChange(e) {\n\t\tsetValue(e.target.value)\n\t}\n\t\n\treturn [value, handleChange]\n}\n\nexport default useSelect"},
+finalUpdate,
+	/*
 { file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.jsx',
-  content: "import React, { useState } from \'react\'\nimport axios from \'axios\'\n\nconst Update" + titleCaseSingular + " = (props) => {\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tfunction update" + titleCaseSingular + "(" + lowerCaseSingular + "id) {\n\t\taxios.put(`api/" + lowerCasePlural + "/${" + lowerCaseSingular + "id}`,\n\t\t\t{\n\t\t\t\ttitle: props." + lowerCaseSingular + ".title,\n\t\t\t\tdirector: props." + lowerCaseSingular + ".director,\n\t\t\t\tyear: props." + lowerCaseSingular + ".year\n\t\t\t}\n\t\t)\n\t\t.then(res => {\n\t\t\tconsole.log(\'" + lowerCaseSingular + " updated\')\n\t\t\t// show message\n\t\t\tsetMsg(\'" + titleCaseSingular + " updated!\')\n\t\t\tsetMsgColor(\'#0ff\')\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem updating " + lowerCaseSingular + "!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// remove from db\n\t\tupdate" + titleCaseSingular + "(props." + lowerCaseSingular + "id)\n\t\t// clear form\n\t\tdocument.getElementById(\'update-" + lowerCaseSingular + "-form\').reset()\n\t}\n\t\n\treturn(\n\t\t<div>\n\t\t\t<div className=\"update-" + lowerCaseSingular + "\"><br />\n\t\t\t\t<h3>Update " + titleCaseSingular + "</h3>\n\t\t\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t\t\t<form onSubmit={handleSubmit} id=\"update-" + lowerCaseSingular + "-form\">\n\t\t\t\t\t<label htmlFor=\"title\">Title:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"title\" id=\"title\" value={props." + lowerCaseSingular + ".title} onChange={props.useInputTitleChange} /><br />\n\t\t\t\t\t<label htmlFor=\"director\">Director:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"director\" id=\"director\" value={props." + lowerCaseSingular + ".director} onChange={props.useInputDirectorChange} /><br />\n\t\t\t\t\t<label htmlFor=\"year\">Year:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"year\" id=\"year\" value={props." + lowerCaseSingular + ".year} onChange={props.useInputYearChange} /><br />\n\t\t\t\t\t<input type=\"submit\" value=\"Update " + titleCaseSingular + "\"/>\n\t\t\t\t</form>\n\t\t\t</div>\n\t\t</div>\n\t)\n}\n\nexport default Update" + titleCaseSingular + ""},
+	content: "import React, { useState } from \'react\'\nimport axios from \'axios\'\n\nconst Update" + titleCaseSingular + " = (props) => {\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tfunction update" + titleCaseSingular + "(" + lowerCaseSingular + "id) {\n\t\taxios.put(`api/" + lowerCasePlural + "/${" + lowerCaseSingular + "id}`,\n\t\t\t{\n\t\t\t\ttitle: props." + lowerCaseSingular + ".title,\n\t\t\t\tdirector: props." + lowerCaseSingular + ".director,\n\t\t\t\tyear: props." + lowerCaseSingular + ".year\n\t\t\t}\n\t\t)\n\t\t.then(res => {\n\t\t\tconsole.log(\'" + lowerCaseSingular + " updated\')\n\t\t\t// show message\n\t\t\tsetMsg(\'" + titleCaseSingular + " updated!\')\n\t\t\tsetMsgColor(\'#0ff\')\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem updating " + lowerCaseSingular + "!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// remove from db\n\t\tupdate" + titleCaseSingular + "(props." + lowerCaseSingular + "id)\n\t\t// clear form\n\t\tdocument.getElementById(\'update-" + lowerCaseSingular + "-form\').reset()\n\t}\n\t\n\treturn(\n\t\t<div>\n\t\t\t<div className=\"update-" + lowerCaseSingular + "\"><br />\n\t\t\t\t<h3>Update " + titleCaseSingular + "</h3>\n\t\t\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t\t\t<form onSubmit={handleSubmit} id=\"update-" + lowerCaseSingular + "-form\">\n\t\t\t\t\t<label htmlFor=\"title\">Title:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"title\" id=\"title\" value={props." + lowerCaseSingular + ".title} onChange={props.useInputTitleChange} /><br />\n\t\t\t\t\t<label htmlFor=\"director\">Director:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"director\" id=\"director\" value={props." + lowerCaseSingular + ".director} onChange={props.useInputDirectorChange} /><br />\n\t\t\t\t\t<label htmlFor=\"year\">Year:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"year\" id=\"year\" value={props." + lowerCaseSingular + ".year} onChange={props.useInputYearChange} /><br />\n\t\t\t\t\t<input type=\"submit\" value=\"Update " + titleCaseSingular + "\"/>\n\t\t\t\t</form>\n\t\t\t</div>\n\t\t</div>\n\t)\n}\n\nexport default Update" + titleCaseSingular + ""},
+*/
 { file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.scss',
 	content: ".update-" + lowerCaseSingular + " {\n\t\n}\n\n#update-" + lowerCaseSingular + "-form {\n\t\n}"},
 { file: 'frontend/src/components/Read' + titleCasePlural + '/Read' + titleCasePlural + '.jsx',
