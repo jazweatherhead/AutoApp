@@ -243,7 +243,7 @@ function buildUpdateNoun() {
 		let model2 = ''
 		for (const key in config.dbSchema) {
 			model2 += `\t\t\t\t\t<label htmlFor="${key}">${key[0].toUpperCase() + key.slice(1)}:</label><br />\n`
-			model2 += `\t\t\t\t\t<input type="text" name="${key}" id="${key}" value={props.${lowerCaseSingular}.${key}} onChange={handleInputChange} /><br />\n`
+			model2 += `\t\t\t\t\t<input type="text" name="${key}" id="${key}" value={props.${lowerCaseSingular}.${key}} onChange={props.handleInputChange} /><br />\n`
 		}
 		
 	
