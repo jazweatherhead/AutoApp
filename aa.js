@@ -149,7 +149,7 @@ ${model1}
 	
 	// get movie details
 	useEffect(() => {
-		axios.get(\`/api/movies/${movieid}\`)
+		axios.get(\`/api/movies/$\{movieid\}\`)
 			.then(res => {
 				setMovie(res.data)
 				console.log(res.data)
