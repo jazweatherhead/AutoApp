@@ -419,6 +419,35 @@ export default Create${titleCaseSingular}`
 		return create
 	}
 	makeCreate()
+	
+	packCreate = async () => {
+		try {
+			const model = makeCreate()
+	
+			const reNewLine = /\n/g
+			const reTab = /\t/g
+			const reQuote = /'/g
+			
+			const packedCreate = model
+			.replace(reNewLine, '\n')
+			.replace(reTab, '\t')
+			.replace(reQuote, "\'")
+			
+			// console.log(packedCreate)
+			
+			const objCreate = {
+				file: 'frontend/src/components/Create' + titleCaseSingular + '/Create' + titleCaseSingular + '.jsx',
+				content: packedCreate
+			}
+			
+			finalCreate = objCreate
+			
+		} catch (err) {
+			console.error('! Problem Packing Create !')
+			throw err
+		}
+	}
+	packCreate()
 }
 buildCreateNoun()
 
@@ -509,10 +538,13 @@ finalRead,
 { file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.jsx',
   content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport useSelect from \'../../hooks/useSelect\'\n\t\nimport \'./Delete" + titleCaseSingular + ".scss\'\n\nfunction Delete" + titleCaseSingular + "() {\n\tconst [id, setId] = useSelect(null)\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + "() {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// remove from db\n\t\tdel" + titleCaseSingular + "(id)\n\t\t// get " + lowerCaseSingular + " list again\n\t\tget" + titleCasePlural + "()\n\t}\n\t\n\tfunction del" + titleCaseSingular + "(id) {\n\t\taxios.delete(`api/" + lowerCasePlural + "/${id}`)\n\t\t.then(res => {\n\t\t\t\tconsole.log(\'" + lowerCaseSingular + " removed from db\')\n\t\t\t\t// show message\n\t\t\t\tsetMsg(\'" + titleCaseSingular + " removed from database!\')\n\t\t\t\tsetMsgColor(\'#0ff\')\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem removing " + titleCaseSingular + " from database!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\treturn (\n\t\t<div className=\"delete-" + lowerCaseSingular + "\">\n\t\t<h2>Delete " + titleCaseSingular + "</h2>\n\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t<form onSubmit={handleSubmit} id=\"delete-" + lowerCaseSingular + "-form\">\n\t\t\t<label htmlFor=\"title\">Title:</label><br /><br />\n\t\t\t<select id=\"" + lowerCaseSingular + "\" name=\"" + lowerCaseSingular + "\" onChange={setId}>\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t\t<option key={" + lowerCaseSingular + "._id} value={" + lowerCaseSingular + "._id}>{" + lowerCaseSingular + ".title}</option>\n\t\t\t\t))\n\t\t\t}\n\t\t\t</select>\n\t\t\t<br />\n\t\t\t<input type=\"submit\" value=\"Remove " + titleCaseSingular + " from DB\"/>\n\t\t</form>\n\t\t</div>\n\t)\n}\n\nexport default Delete" + titleCaseSingular + ""},
 { file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.scss',
-  content: ".delete-" + lowerCaseSingular + " {\n\t\n}"},
+	content: ".delete-" + lowerCaseSingular + " {\n\t\n}"},
+finalCreate,
+/*
 { file: 'frontend/src/components/Create' + titleCaseSingular + '/Create' + titleCaseSingular + '.jsx',
   content: "import React, { useState } from \'react\'\nimport axios from \'axios\'\n\nimport useInput from \'../../hooks/useInput\'\nimport \'./Create" + titleCaseSingular + ".scss\'\n\nfunction Create" + titleCaseSingular + "() {\n\tconst [title, setTitle] = useInput(null)\n\tconst [director, setDirector] = useInput(null)\n\tconst [year, setYear] = useInput(null)\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// add to db\n\t\tpost" + titleCaseSingular + "(\n\t\t\ttitle,\n\t\t\tdirector,\n\t\t\tyear\n\t\t)\n\t\t// clear form\n\t\tdocument.getElementById(\'create-" + lowerCaseSingular + "-form\').reset()\n\t}\n\t\n\t// TODO test this\n\tfunction post" + titleCaseSingular + "(title, director, year) {\n\t\taxios.post(\'api/" + lowerCasePlural + "\', {\n\t\t\ttitle: title,\n\t\t\tdirector: director,\n\t\t\tyear: year\n\t\t})\n\t\t.then(res => {\n\t\t\tif (res.data) {\n\t\t\t\tconsole.log(res.data)\n\t\t\t\tconsole.log(\'" + lowerCaseSingular + " added to db\')\n\t\t\t\t// show message\n\t\t\t\tsetMsg(\'" + titleCaseSingular + " added to database!\')\n\t\t\t\tsetMsgColor(\'#0ff\')\n\t\t\t}\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem adding " + lowerCaseSingular + " to database!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\treturn (\n\t\t<div className=\"create-" + lowerCaseSingular + "\">\n\t\t<h2>Create " + titleCaseSingular + "</h2>\n\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t<form onSubmit={handleSubmit} id=\"create-" + lowerCaseSingular + "-form\">\n\t\t\t<label htmlFor=\"title\">Title:</label><br />\n\t\t\t<input type=\"text\" name=\"title\" onChange={setTitle} required />\n\t\t\t<br />\n\t\t\t<label htmlFor=\"director\">Director:</label><br />\n\t\t\t<input type=\"text\" name=\"director\" onChange={setDirector} required />\n\t\t\t<br />\n\t\t\t<label htmlFor=\"year\">Year:</label><br />\n\t\t\t<input type=\"text\" name=\"year\" onChange={setYear} required />\n\t\t\t<br />\n\t\t\t<input type=\"submit\" value=\"Add " + titleCaseSingular + " to DB\"/>\n\t\t</form>\n\t\t</div>\n\t)\n}\n\nexport default Create" + titleCaseSingular + ""},
-{ file: 'frontend/src/components/Create' + titleCaseSingular + '/Create' + titleCaseSingular + '.scss',
+*/
+	{ file: 'frontend/src/components/Create' + titleCaseSingular + '/Create' + titleCaseSingular + '.scss',
   content: ".create-" + lowerCaseSingular + " {\n\t\n}"},
 { file: 'frontend/public/index.html',
   content: "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <link rel=\"icon\" href=\"%PUBLIC_URL%/favicon.ico\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <meta name=\"theme-color\" content=\"#000000\" />\n    <meta\n      name=\"description\"\n      content=\"Web site created using create-react-app\"\n    />\n    <link rel=\"apple-touch-icon\" href=\"%PUBLIC_URL%/logo192.png\" />\n    <!--\n      manifest.json provides metadata used when your web app is installed on a\n      user\'s mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/\n    -->\n    <link rel=\"manifest\" href=\"%PUBLIC_URL%/manifest.json\" />\n    <!--\n      Notice the use of %PUBLIC_URL% in the tags above.\n      It will be replaced with the URL of the `public` folder during the build.\n      Only files inside the `public` folder can be referenced from the HTML.\n\n      Unlike \"/favicon.ico\" or \"favicon.ico\", \"%PUBLIC_URL%/favicon.ico\" will\n      work correctly both with client-side routing and a non-root public URL.\n      Learn how to configure a non-root public URL by running `npm run build`.\n    -->\n    <title>" + config.name + "</title>\n  </head>\n  <body>\n    <noscript>You need to enable JavaScript to run this app.</noscript>\n    <div id=\"root\"></div>\n    <!--\n      This HTML file is a template.\n      If you open it directly in the browser, you will see an empty page.\n\n      You can add webfonts, meta tags, or analytics to this file.\n      The build step will place the bundled scripts into the <body> tag.\n\n      To begin the development, run `npm start` or `yarn start`.\n      To create a production bundle, use `npm run build` or `yarn build`.\n    -->\n  </body>\n</html>\n"},
