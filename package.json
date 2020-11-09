@@ -1,14 +1,13 @@
 {
-  "name": "aa-1.5",
-  "version": "1.0.0",
-  "description": "aa 1.5",
+  "name": "AutoApp",
+  "version": "2.0.0",
+  "description": "MERN/REST scaffolding generator",
   "main": "aa.js",
   "repository": "git@github.com:jasmyn/aa-1.5.git",
   "author": "Jaz <jaz@weatherheadco.de>",
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "chalk": "^4.1.0",
     "cli-spinner": "^0.2.10",
     "fs-extra": "^9.0.1",
     "readdirp": "^3.5.0"
