@@ -220,7 +220,7 @@ export default ReadMovie
 				content: packedRead
 			}
 			
-			finalModel = objModel
+			finalRead = objRead
 			
 		} catch (err) {
 			console.error('! Problem Packing ReadNoun !')
