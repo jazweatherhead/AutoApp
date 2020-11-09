@@ -22,7 +22,7 @@ Right? Just feed it some assets and watch it go...
 ### Clone
 Clone the repo into your empty project directory. Don't forget the trailing dot!
 
-`$ git clone http://github.com/jasmyn/AutoAppJS.git .`
+`$ git clone http://github.com/jasmyn/AutoApp.git .`
 
 
 ### Configure
