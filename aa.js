@@ -155,7 +155,7 @@ ${model1}
 				console.log(res.data)
 			})
 			.catch(err => console.error(err))
-	}, [])
+	}, [${lowerCaseSingular}id])
 	
 	function handleEditButton(e) {
 		e.preventDefault()
