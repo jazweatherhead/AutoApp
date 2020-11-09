@@ -184,7 +184,7 @@ ${model3}
 				</form>
 			</div>
 			{!isUpdateHidden && (
-				<UpdateMovie
+				<Update${titleCaseSingular}
 					movie={${lowerCaseSingular}}
 					movieid={${lowerCaseSingular}id}
 					handleInputChange={handleInputChange} /> 
