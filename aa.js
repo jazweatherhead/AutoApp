@@ -114,7 +114,7 @@ function buildReadNoun() {
 			for (let key2 = 0; key2 < keys.length; key2++) {
 				const isTarget = key2 === target ? true : false
 				const value = isTarget ? 'e.target.value' : `${lowerCaseSingular}.${keys[key2]}`
-				model2 += `\t\t\t\t\t${keys[key2]}: ${value},\n`
+				model2 += `\t\t\t${keys[key2]}: ${value},\n`
 			}
 			model2 += `\t\t\t\t}\n\t\t\t\tbreak\n`
 			target++
