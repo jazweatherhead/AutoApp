@@ -334,9 +334,93 @@ export default Update${titleCaseSingular}`
 }
 buildUpdateNoun()
 
-// function buildCreateNoun() {
+let finalCreate
+function buildCreateNoun() {
+	makeCreate = () => {		
+		let model1 = ''
+		for (const key in config.dbSchema) {
+			model1 += `\tconst [${key}, set${key[0].toUpperCase() + key.slice(1)}] = useInput(null)\n`
+		}
+		
+		let model2 = ''
+		for (const key in config.dbSchema) {
+			model2 += `\t\t\t${key},\n`
+		}
+		
+		let model3 = ''
+		for (const key in config.dbSchema) {
+			model3 += `\t\t\t${key}: ${key},\n`
+		}
+		
+		let model4 = ''
+		for (const key in config.dbSchema) {
+			model4 += `\t\t\t<label htmlFor="${key}">${key[0].toUpperCase() + key.slice(1)}:</label><br />\n`
+			model4 += `\t\t\t<input type="text" name="${key}" onChange={setTitle} required />\n`
+			model4 += `\t\t\t<br />\n`
+		}
 	
-// }
+		const create = `import React, { useState } from 'react'
+import axios from 'axios'
+
+import useInput from '../../hooks/useInput'
+import './Create${titleCaseSingular}.scss'
+
+function Create${titleCaseSingular}() {
+${model1}
+	const [msg, setMsg] = useState('')
+	const [msgColor, setMsgColor] = useState('#0f0')
+	
+	function handleSubmit(e) {
+		e.preventDefault()
+		// add to db
+		post${titleCaseSingular}(
+${model2}
+		)
+		// clear form
+		document.getElementById('create-${lowerCaseSingular}-form').reset()
+	}
+	
+	// TODO test this
+	function post${titleCaseSingular}(title, director, year) {
+		axios.post('api/${lowerCasePlural}', {
+${model3}
+		})
+		.then(res => {
+			if (res.data) {
+				console.log(res.data)
+				console.log('${lowerCaseSingular} added to db')
+				// show message
+				setMsg('${titleCaseSingular} added to database!')
+				setMsgColor('#0ff')
+			}
+		})
+		.catch(err => {
+			console.error(err)
+			// show message
+			setMsg('Problem adding ${lowerCaseSingular} to database!')
+			setMsgColor('#f00')
+		})
+	}
+	
+	return (
+		<div className="create-${lowerCaseSingular}">
+		<h2>Create ${titleCaseSingular}</h2>
+		<p id="msg" style={{fontWeight: 'bold', color: msgColor}}>{msg}</p>
+		<form onSubmit={handleSubmit} id="create-${lowerCaseSingular}-form">
+${model4}
+			<input type="submit" value="Add ${titleCaseSingular} to DB"/>
+		</form>
+		</div>
+	)
+}
+
+export default Create${titleCaseSingular}`
+	// console.log(`\n${create}`)
+		return create
+	}
+	makeCreate()
+}
+buildCreateNoun()
 
 /* Directories to be built. */
 const dirs = [
