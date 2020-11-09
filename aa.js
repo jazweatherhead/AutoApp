@@ -255,7 +255,7 @@ const Update${titleCaseSingular} = (props) => {
 	const [msgColor, setMsgColor] = useState('#0f0')
 	const { handleInputChange, ${lowerCaseSingular}, ${lowerCaseSingular}id } = props
 	
-	function update${titleCaseSingular}($\{lowerCaseSingular\}id) {
+	function update${titleCaseSingular}(${lowerCaseSingular}id) {
 		axios.put(\`api/${lowerCaseSingular}/$\{${lowerCaseSingular}id\}\`,
 			{
 ${model1}
