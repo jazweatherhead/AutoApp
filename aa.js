@@ -46,53 +46,54 @@ spinner.start()
 // const year = now.getFullYear()
 
 /* Build model */
-makeModel = () => {
-	let schema = ''
-	for (const key in config.dbSchema) {
-		schema += `	${key}: { type: ${config.dbSchema[key].type}, required: ${config.dbSchema[key].required}},\n`
-	}
-
-	const model = `const mongoose = require('mongoose')
-
-const ${lowerCaseSingular}Schema = new mongoose.Schema({
-${schema}
-})
-mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first param determines the collection name
-`
-// console.log(`\n${model}`)
-	return model
-}
-
 let finalModel
-
-packModel = async () => {
-	try {
-		const model = makeModel()
-
-		const reNewLine = /\n/g
-		const reTab = /\t/g
-		const reQuote = /'/g
-		
-		const packedModel = model
-		.replace(reNewLine, '\n')
-		.replace(reTab, '\t')
-		.replace(reQuote, "\'")
-		
-		// console.log(packedModel)
-		
-		const objModel = {
-			file: `api/models/${lowerCasePlural}.js`,
-			content: packedModel
+function buildModel() {
+	makeModel = () => {
+		let schema = ''
+		for (const key in config.dbSchema) {
+			schema += `	${key}: { type: ${config.dbSchema[key].type}, required: ${config.dbSchema[key].required}},\n`
 		}
-		
-		finalModel = objModel
-		
-	} catch (err) {
-		console.error('Problem packing model!')
-		throw err
+	
+		const model = `const mongoose = require('mongoose')
+	
+	const ${lowerCaseSingular}Schema = new mongoose.Schema({
+	${schema}
+	})
+	mongoose.model('${titleCaseSingular}', ${lowerCaseSingular}Schema) // the first param determines the collection name
+	`
+	// console.log(`\n${model}`)
+		return model
+	}
+	
+	packModel = async () => {
+		try {
+			const model = makeModel()
+	
+			const reNewLine = /\n/g
+			const reTab = /\t/g
+			const reQuote = /'/g
+			
+			const packedModel = model
+			.replace(reNewLine, '\n')
+			.replace(reTab, '\t')
+			.replace(reQuote, "\'")
+			
+			// console.log(packedModel)
+			
+			const objModel = {
+				file: `api/models/${lowerCasePlural}.js`,
+				content: packedModel
+			}
+			
+			finalModel = objModel
+			
+		} catch (err) {
+			console.error('Problem packing model!')
+			throw err
+		}
 	}
 }
-packModel()
+// packModel()
 
 /* Directories to be built. */
 const dirs = [
@@ -288,9 +289,9 @@ async function installDeps() {
 }
 
 async function appBuilder() {
+	buildModel()
 	await dirMaker()
 	await fileMaker()
-	console.log('* App Structure Created *')
 	copyAssets()
 	installDeps()
 }
