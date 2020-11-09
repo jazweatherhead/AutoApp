@@ -64,6 +64,7 @@ function buildModel() {
 	// console.log(`\n${model}`)
 		return model
 	}
+	makeModel()
 	
 	packModel = async () => {
 		try {
@@ -92,6 +93,7 @@ function buildModel() {
 			throw err
 		}
 	}
+	packModel()
 }
 buildModel()
 
