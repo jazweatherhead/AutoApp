@@ -256,7 +256,7 @@ const Update${titleCaseSingular} = (props) => {
 	const { handleInputChange, ${lowerCaseSingular}, ${lowerCaseSingular}id}
 	
 	function update${titleCaseSingular}(${lowerCaseSingular}id) {
-		axios.put(\`api/movies/${movieid}\`,
+		axios.put(\`api/movies/$\{movieid\}\`,
 			{
 ${model1}
 			}
