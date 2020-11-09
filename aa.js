@@ -89,13 +89,151 @@ function buildModel() {
 			finalModel = objModel
 			
 		} catch (err) {
-			console.error('Problem packing model!')
+			console.error('! Problem Packing Model !')
 			throw err
 		}
 	}
 	packModel()
 }
 buildModel()
+
+let finalRead
+function buildReadNoun() {
+	makeRead = () => {
+		let model1 = ''
+		for (const key in config.dbSchema) {
+			model1 += `\t\t\t${key}: '',\n`
+		}
+		
+		let model2 = ''
+		
+		let target = 0
+		const keys = Object.keys(config.dbSchema)
+		for (const key in config.dbSchema) {
+			model2 += `\t\t\tcase '${key}':\n\t\t\t\teditBlock = {\n`
+			for (let key2 = 0; key2 < keys.length; key2++) {
+				const isTarget = key2 === target ? true : false
+				const value = isTarget ? 'e.target.value' : `${lowerCaseSingular}.${keys[key2]}`
+				model2 += `\t\t\t\t\t${keys[key2]}: ${value},\n`
+			}
+			model2 += `\t\t\t\t}\n\t\t\t\tbreak\n`
+			target++
+		}
+		
+		let model3 = ''
+		
+		model3 = `\t\t\t\t<h2>{${lowerCaseSingular}.${config.title}}</h2>\n`
+		for (const key in config.dbSchema) {
+			if (key !== config.title) {
+				model3 += `\t\t\t\t${key[0].toUpperCase() + key.slice(1)}: {${lowerCaseSingular}.${key}}<br />\n`
+			}
+		}
+		
+		const read = `import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+
+import UpdateMovie from '../UpdateMovie/UpdateMovie'
+
+import './ReadMovie.scss'
+
+function ReadMovie() {
+	const [movie, setMovie] = useState(
+		{
+${model1}
+		}
+	)
+	const [isUpdateHidden, setIsUpdateHidden] = useState(true)	
+	
+	let { movieid } = useParams()
+	
+	// get movie details
+	useEffect(() => {
+		axios.get(\`/api/movies/${movieid}\`)
+			.then(res => {
+				setMovie(res.data)
+				console.log(res.data)
+			})
+			.catch(err => console.error(err))
+	}, [])
+	
+	function handleEditButton(e) {
+		e.preventDefault()
+		setIsUpdateHidden(!isUpdateHidden)
+	}
+
+	function handleInputChange(e) {
+		let editBlock
+		switch (e.target.name) {
+${model2}
+			default:
+				console.log('The form is confused...')
+				break
+		}
+
+		setMovie(editBlock)
+	}
+	
+	return (
+		<div>
+			<div className="read-movie">
+${model3}
+				<br />
+				<form>
+					<input type="submit" value={isUpdateHidden ? "Edit Movie": "Nevermind"} onClick={handleEditButton}/>
+				</form>
+			</div>
+			{!isUpdateHidden && (
+				<UpdateMovie
+					movie={movie}
+					movieid={movieid}
+					handleInputChange={handleInputChange} /> 
+			)}
+		</div>
+	)
+}
+
+export default ReadMovie
+	`
+		// console.log(`\n${read}`)
+		return read
+	}
+	makeRead()
+	
+	packRead = async () => {
+		try {
+			const read = makeRead()
+	
+			const reNewLine = /\n/g
+			const reTab = /\t/g
+			const reQuote = /'/g
+			
+			const packedRead = read
+			.replace(reNewLine, '\n')
+			.replace(reTab, '\t')
+			.replace(reQuote, "\'")
+			
+			// console.log(packedRead)
+			
+			const objRead = {
+				file: 'frontend/src/components/Read' + titleCaseSingular + '/Read' + titleCaseSingular + '.jsx',
+				content: packedRead
+			}
+			
+			finalModel = objModel
+			
+		} catch (err) {
+			console.error('! Problem Packing ReadNoun !')
+			throw err
+		}
+	}
+	packRead()
+}
+buildReadNoun()
+
+// function buildCreateNoun() {
+	
+// }
 
 /* Directories to be built. */
 const dirs = [
@@ -162,9 +300,12 @@ files = [
 { file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.jsx',
   content: "import React, { useState } from \'react\'\nimport axios from \'axios\'\n\nconst Update" + titleCaseSingular + " = (props) => {\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tfunction update" + titleCaseSingular + "(" + lowerCaseSingular + "id) {\n\t\taxios.put(`api/" + lowerCasePlural + "/${" + lowerCaseSingular + "id}`,\n\t\t\t{\n\t\t\t\ttitle: props." + lowerCaseSingular + ".title,\n\t\t\t\tdirector: props." + lowerCaseSingular + ".director,\n\t\t\t\tyear: props." + lowerCaseSingular + ".year\n\t\t\t}\n\t\t)\n\t\t.then(res => {\n\t\t\tconsole.log(\'" + lowerCaseSingular + " updated\')\n\t\t\t// show message\n\t\t\tsetMsg(\'" + titleCaseSingular + " updated!\')\n\t\t\tsetMsgColor(\'#0ff\')\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem updating " + lowerCaseSingular + "!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// remove from db\n\t\tupdate" + titleCaseSingular + "(props." + lowerCaseSingular + "id)\n\t\t// clear form\n\t\tdocument.getElementById(\'update-" + lowerCaseSingular + "-form\').reset()\n\t}\n\t\n\treturn(\n\t\t<div>\n\t\t\t<div className=\"update-" + lowerCaseSingular + "\"><br />\n\t\t\t\t<h3>Update " + titleCaseSingular + "</h3>\n\t\t\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t\t\t<form onSubmit={handleSubmit} id=\"update-" + lowerCaseSingular + "-form\">\n\t\t\t\t\t<label htmlFor=\"title\">Title:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"title\" id=\"title\" value={props." + lowerCaseSingular + ".title} onChange={props.useInputTitleChange} /><br />\n\t\t\t\t\t<label htmlFor=\"director\">Director:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"director\" id=\"director\" value={props." + lowerCaseSingular + ".director} onChange={props.useInputDirectorChange} /><br />\n\t\t\t\t\t<label htmlFor=\"year\">Year:</label><br />\n\t\t\t\t\t<input type=\"text\" name=\"year\" id=\"year\" value={props." + lowerCaseSingular + ".year} onChange={props.useInputYearChange} /><br />\n\t\t\t\t\t<input type=\"submit\" value=\"Update " + titleCaseSingular + "\"/>\n\t\t\t\t</form>\n\t\t\t</div>\n\t\t</div>\n\t)\n}\n\nexport default Update" + titleCaseSingular + ""},
 { file: 'frontend/src/components/Update' + titleCaseSingular + '/Update' + titleCaseSingular + '.scss',
-  content: ".update-" + lowerCaseSingular + " {\n\t\n}\n\n#update-" + lowerCaseSingular + "-form {\n\t\n}"},
+	content: ".update-" + lowerCaseSingular + " {\n\t\n}\n\n#update-" + lowerCaseSingular + "-form {\n\t\n}"},
+/*
 { file: 'frontend/src/components/Read' + titleCasePlural + '/Read' + titleCasePlural + '.jsx',
-  content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport \'./Read" + titleCasePlural + ".scss\'\n\nfunction Read" + titleCasePlural + "() {\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + " () {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\treturn (\n\t\t<div className=\"read-" + lowerCasePlural + "\">\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t<p key={" + lowerCaseSingular + "._id}>\n\t\t\t\t\t<a href={`/${" + lowerCaseSingular + "._id}`}>{" + lowerCaseSingular + "." + config.title + "}</a>\n\t\t\t\t</p>\n\t\t\t\t))\n\t\t\t}\n\t\t</div>\n\t)\n}\n\nexport default Read" + titleCasePlural + ""},
+	content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport \'./Read" + titleCasePlural + ".scss\'\n\nfunction Read" + titleCasePlural + "() {\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + " () {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\treturn (\n\t\t<div className=\"read-" + lowerCasePlural + "\">\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t<p key={" + lowerCaseSingular + "._id}>\n\t\t\t\t\t<a href={`/${" + lowerCaseSingular + "._id}`}>{" + lowerCaseSingular + "." + config.title + "}</a>\n\t\t\t\t</p>\n\t\t\t\t))\n\t\t\t}\n\t\t</div>\n\t)\n}\n\nexport default Read" + titleCasePlural + ""},
+*/
+finalRead,
 { file: 'frontend/src/components/Read' + titleCasePlural + '/Read' + titleCasePlural + '.scss',
   content: ".read-" + lowerCasePlural + " {\n\t\n}"},
 { file: 'frontend/src/components/Read' + titleCaseSingular + '/Read' + titleCaseSingular + '.jsx',
