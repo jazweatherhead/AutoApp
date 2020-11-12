@@ -541,7 +541,7 @@ async function buildDeleteNoun() {
 		// console.log(packedModel)
 		
 		const objDel = {
-			file: `api/models/${lowerCasePlural}.js`,
+			file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.jsx',
 			content: packedDel
 		}
 		
@@ -553,108 +553,6 @@ async function buildDeleteNoun() {
 	}
 }
 buildDeleteNoun()
-
-let finalDelete
-function buildDelete() {
-	try {
-		const del = `import React, { useState, useEffect } from 'react'
-		import axios from 'axios'
-		
-		import useSelect from '../../hooks/useSelect'
-			
-		import './Delete${titleCaseSingular}.scss'
-		
-		function Delete${titleCaseSingular}() {
-			const [id, setId] = useSelect(null)
-			const [${lowerCasePlural}, set${titleCasePlural}] = useState([])
-			const [msg, setMsg] = useState('')
-			const [msgColor, setMsgColor] = useState('#0f0')
-			
-			useEffect(() => {
-				get${titleCasePlural}()
-			}, [])
-			
-			function get${titleCasePlural}() {
-				axios.get('/api/${lowerCasePlural}')
-					.then(res => {
-						if (res.data) {
-							set${titleCasePlural}(res.data)
-							console.log(res.data)
-						}
-					})
-					.catch(err => console.error(err))
-			}
-			
-			function handleSubmit(e) {
-				e.preventDefault()
-				// remove from db
-				del${titleCaseSingular}(id)
-				// get ${lowerCaseSingular} list again
-				get${titleCasePlural}()
-			}
-			
-			function del${titleCaseSingular}(id) {
-				axios.delete(\`api/${lowerCasePlural}/id\`)
-				.then(res => {
-						console.log('${lowerCaseSingular} removed from db')
-						// show message
-						setMsg('${titleCaseSingular} removed from database!')
-						setMsgColor('#0ff')
-				})
-				.catch(err => {
-					console.error(err)
-					// show message
-					setMsg('Problem removing ${titleCaseSingular} from database!')
-					setMsgColor('#f00')
-				})
-			}
-			
-			return (
-				<div className="delete-${lowerCaseSingular}">
-				<h2>Delete ${titleCaseSingular}</h2>
-				<p id="msg" style={{fontWeight: 'bold', color: msgColor}}>{msg}</p>
-				<form onSubmit={handleSubmit} id="delete-${lowerCaseSingular}-form">
-					<label htmlFor="title">${config.title[0]+config.title.slice(1)}:</label><br /><br />
-					<select id="${lowerCaseSingular}" name="${lowerCaseSingular}" onChange={setId}>
-					{
-						${lowerCasePlural}.map(${lowerCaseSingular} => (
-							<option key={${lowerCaseSingular}._id} value={${lowerCaseSingular}._id}>{${lowerCaseSingular}.title}</option>
-						))
-					}
-					</select>
-					<br />
-					<input type="submit" value="Remove ${titleCaseSingular} from DB"/>
-				</form>
-				</div>
-			)
-		}
-		
-		export default Delete${titleCaseSingular}`
-
-		const reNewLine = /\n/g
-		const reTab = /\t/g
-		const reQuote = /'/g
-		
-		const packedDel = del
-		.replace(reNewLine, '\n')
-		.replace(reTab, '\t')
-		.replace(reQuote, "\'")
-		
-		// console.log(packedModel)
-		
-		const objDel = {
-			file: `api/models/${lowerCasePlural}.js`,
-			content: packedDel
-		}
-		
-		finalModel = objDel
-		
-	} catch (err) {
-		console.error('! Problem Packing Delete !')
-		throw err
-	}
-}
-buildDelete()
 
 /* Directories to be built. */
 const dirs = [
