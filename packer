@@ -84,6 +84,6 @@ const processDirs = async () => {
 	writeMe.write(`]\n\n`)
 	writeMe.end()
 }
-processDirs()
+// processDirs()
 
 //#endregion

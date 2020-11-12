@@ -452,6 +452,143 @@ export default Create${titleCaseSingular}`
 }
 buildCreateNoun()
 
+let finalDel
+async function buildDeleteNoun() {
+	try {
+		const del = `import React, { useState, useEffect } from 'react'
+		import axios from 'axios'
+		
+		import useSelect from '../../hooks/useSelect'
+			
+		import './Delete${titleCaseSingular}.scss'
+		
+		function Delete${titleCaseSingular}() {
+			const [id, setId] = useSelect(null)
+			const [${lowerCasePlural}, set${titleCasePlural}] = useState([])
+			const [msg, setMsg] = useState('')
+			const [msgColor, setMsgColor] = useState('#0f0')
+			
+			useEffect(() => {
+				get${titleCasePlural}()
+			}, [])
+			
+			function get${titleCasePlural}() {
+				axios.get('/api/${lowerCasePlural}')
+					.then(res => {
+						if (res.data) {
+							set${titleCasePlural}(res.data)
+							console.log(res.data)
+						}
+					})
+					.catch(err => console.error(err))
+			}
+			
+			function handleSubmit(e) {
+				e.preventDefault()
+				// remove from db
+				del${titleCaseSingular}(id)
+				// get ${lowerCaseSingular} list again
+				get${titleCasePlural}()
+			}
+			
+			function del${titleCaseSingular}(id) {
+				axios.delete(\`api/${lowerCasePlural}/${id}\`)
+				.then(res => {
+						console.log('${lowerCaseSingular} removed from db')
+						// show message
+						setMsg('${titleCaseSingular} removed from database!')
+						setMsgColor('#0ff')
+				})
+				.catch(err => {
+					console.error(err)
+					// show message
+					setMsg('Problem removing ${titleCaseSingular} from database!')
+					setMsgColor('#f00')
+				})
+			}
+			
+			return (
+				<div className="delete-${lowerCaseSingular}">
+				<h2>Delete ${titleCaseSingular}</h2>
+				<p id="msg" style={{fontWeight: 'bold', color: msgColor}}>{msg}</p>
+				<form onSubmit={handleSubmit} id="delete-${lowerCaseSingular}-form">
+					<label htmlFor="title">${config.title[0]+config.title.slice(1)}:</label><br /><br />
+					<select id="${lowerCaseSingular}" name="${lowerCaseSingular}" onChange={setId}>
+					{
+						${lowerCasePlural}.map(${lowerCaseSingular} => (
+							<option key={${lowerCaseSingular}._id} value={${lowerCaseSingular}._id}>{${lowerCaseSingular}.title}</option>
+						))
+					}
+					</select>
+					<br />
+					<input type="submit" value="Remove ${titleCaseSingular} from DB"/>
+				</form>
+				</div>
+			)
+		}
+		
+		export default Delete${titleCaseSingular}`
+
+		const reNewLine = /\n/g
+		const reTab = /\t/g
+		const reQuote = /'/g
+		
+		const packedDel = del
+		.replace(reNewLine, '\n')
+		.replace(reTab, '\t')
+		.replace(reQuote, "\'")
+		
+		// console.log(packedModel)
+		
+		const objDel = {
+			file: `api/models/${lowerCasePlural}.js`,
+			content: packedDel
+		}
+		
+		finalDel = objDel
+		
+	} catch (err) {
+		console.error('! Problem Packing Delete !')
+		throw err
+	}
+}
+buildDeleteNoun()
+
+let finalModel
+function buildDelete() {
+	const delete = ``
+	
+	packDelete = async () => {
+		try {
+			const model = makeDelete()
+	
+			const reNewLine = /\n/g
+			const reTab = /\t/g
+			const reQuote = /'/g
+			
+			const packedDelete = model
+			.replace(reNewLine, '\n')
+			.replace(reTab, '\t')
+			.replace(reQuote, "\'")
+			
+			// console.log(packedDelete)
+			
+			const objDelete = {
+				file: `api/models/${lowerCasePlural}.js`,
+				content: packedDelete
+			}
+			
+			finalDelete = objDelete
+			
+		} catch (err) {
+			console.error('! Problem Packing Delete !')
+			throw err
+		}
+	}
+	packDelete()
+}
+buildDelete()
+
 /* Directories to be built. */
 const dirs = [
 	'api',
@@ -535,10 +672,13 @@ finalRead,
 { file: 'frontend/src/components/Header/Header.jsx',
   content: "import React from \'react\'\nimport { Link } from \'react-router-dom\'\n\nimport \'./Header.scss\'\n\nfunction Header() {\n\treturn (\n\t\t<div className=\"header\">\n\t\t\t<nav>\n\t\t\t\t<Link className=\'option\' to=\'/create\'>\n\t\t\t\t\tCreate\n\t\t\t\t</Link>\n\t\t\t\t<Link className=\'option\' to=\'/delete\'>\n\t\t\t\t\tDelete\n\t\t\t\t</Link>  \n\t\t\t</nav>\n\t\t\t<h1>\n\t\t\t\t<Link className=\'option\' to=\'/\'>\n\t\t\t\t\t" + titleCaseSingular + " DB\n\t\t\t\t</Link>\n\t\t\t</h1>\n\t\t</div>\n\t)\n}\n\nexport default Header"},
 { file: 'frontend/src/components/Header/Header.scss',
-  content: ".header {\n}\n\n.option {\n\tpadding-right: 10px;\n}"},
+	content: ".header {\n}\n\n.option {\n\tpadding-right: 10px;\n}"},
+finalDel,
+/*	
 { file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.jsx',
   content: "import React, { useState, useEffect } from \'react\'\nimport axios from \'axios\'\n\nimport useSelect from \'../../hooks/useSelect\'\n\t\nimport \'./Delete" + titleCaseSingular + ".scss\'\n\nfunction Delete" + titleCaseSingular + "() {\n\tconst [id, setId] = useSelect(null)\n\tconst [" + lowerCasePlural + ", set" + titleCasePlural + "] = useState([])\n\tconst [msg, setMsg] = useState(\'\')\n\tconst [msgColor, setMsgColor] = useState(\'#0f0\')\n\t\n\tuseEffect(() => {\n\t\tget" + titleCasePlural + "()\n\t}, [])\n\t\n\tfunction get" + titleCasePlural + "() {\n\t\taxios.get(\'/api/" + lowerCasePlural + "\')\n\t\t\t.then(res => {\n\t\t\t\tif (res.data) {\n\t\t\t\t\tset" + titleCasePlural + "(res.data)\n\t\t\t\t\tconsole.log(res.data)\n\t\t\t\t}\n\t\t\t})\n\t\t\t.catch(err => console.error(err))\n\t}\n\t\n\tfunction handleSubmit(e) {\n\t\te.preventDefault()\n\t\t// remove from db\n\t\tdel" + titleCaseSingular + "(id)\n\t\t// get " + lowerCaseSingular + " list again\n\t\tget" + titleCasePlural + "()\n\t}\n\t\n\tfunction del" + titleCaseSingular + "(id) {\n\t\taxios.delete(`api/" + lowerCasePlural + "/${id}`)\n\t\t.then(res => {\n\t\t\t\tconsole.log(\'" + lowerCaseSingular + " removed from db\')\n\t\t\t\t// show message\n\t\t\t\tsetMsg(\'" + titleCaseSingular + " removed from database!\')\n\t\t\t\tsetMsgColor(\'#0ff\')\n\t\t})\n\t\t.catch(err => {\n\t\t\tconsole.error(err)\n\t\t\t// show message\n\t\t\tsetMsg(\'Problem removing " + titleCaseSingular + " from database!\')\n\t\t\tsetMsgColor(\'#f00\')\n\t\t})\n\t}\n\t\n\treturn (\n\t\t<div className=\"delete-" + lowerCaseSingular + "\">\n\t\t<h2>Delete " + titleCaseSingular + "</h2>\n\t\t<p id=\"msg\" style={{fontWeight: \'bold\', color: msgColor}}>{msg}</p>\n\t\t<form onSubmit={handleSubmit} id=\"delete-" + lowerCaseSingular + "-form\">\n\t\t\t<label htmlFor=\"title\">Title:</label><br /><br />\n\t\t\t<select id=\"" + lowerCaseSingular + "\" name=\"" + lowerCaseSingular + "\" onChange={setId}>\n\t\t\t{\n\t\t\t\t" + lowerCasePlural + ".map(" + lowerCaseSingular + " => (\n\t\t\t\t\t<option key={" + lowerCaseSingular + "._id} value={" + lowerCaseSingular + "._id}>{" + lowerCaseSingular + ".title}</option>\n\t\t\t\t))\n\t\t\t}\n\t\t\t</select>\n\t\t\t<br />\n\t\t\t<input type=\"submit\" value=\"Remove " + titleCaseSingular + " from DB\"/>\n\t\t</form>\n\t\t</div>\n\t)\n}\n\nexport default Delete" + titleCaseSingular + ""},
-{ file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.scss',
+*/
+	{ file: 'frontend/src/components/Delete' + titleCaseSingular + '/Delete' + titleCaseSingular + '.scss',
 	content: ".delete-" + lowerCaseSingular + " {\n\t\n}"},
 finalCreate,
 /*
