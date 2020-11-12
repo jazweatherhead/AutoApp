@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "MERN/REST scaffolding generator",
   "main": "aa.js",
-  "repository": "git@github.com:jasmyn/aa-1.5.git",
+  "repository": "git@github.com:jasmyn/AutoApp.git",
   "author": "Jaz <jaz@weatherheadco.de>",
   "license": "MIT",
   "private": false,
