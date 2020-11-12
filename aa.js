@@ -516,7 +516,7 @@ async function buildDeleteNoun() {
 					<select id="${lowerCaseSingular}" name="${lowerCaseSingular}" onChange={setId}>
 					{
 						${lowerCasePlural}.map(${lowerCaseSingular} => (
-							<option key={${lowerCaseSingular}._id} value={${lowerCaseSingular}._id}>{${lowerCaseSingular}.title}</option>
+							<option key={${lowerCaseSingular}._id} value={${lowerCaseSingular}._id}>{${lowerCaseSingular}.${config.title}}</option>
 						))
 					}
 					</select>
