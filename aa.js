@@ -492,7 +492,7 @@ async function buildDeleteNoun() {
 			}
 			
 			function del${titleCaseSingular}(id) {
-				axios.delete(\`api/${lowerCasePlural}/${id}\`)
+				axios.delete(\`api/${lowerCasePlural}/id\`)
 				.then(res => {
 						console.log('${lowerCaseSingular} removed from db')
 						// show message
@@ -594,7 +594,7 @@ function buildDelete() {
 			}
 			
 			function del${titleCaseSingular}(id) {
-				axios.delete(\`api/${lowerCasePlural}/${id}\`)
+				axios.delete(\`api/${lowerCasePlural}/id\`)
 				.then(res => {
 						console.log('${lowerCaseSingular} removed from db')
 						// show message
